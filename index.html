@@ -9,7 +9,7 @@ html,body{height:100%;background:#ffffff;display:flex;align-items:center;justify
 .ambient-blob:nth-child(2){width:40vw;height:40vh;top:5%;right:5%;background:radial-gradient(ellipse,rgba(88,166,255,.15) 0%,transparent 70%);animation-delay:-3s}
 .ambient-blob:nth-child(3){width:35vw;height:30vh;bottom:5%;left:10%;background:radial-gradient(ellipse,rgba(188,140,255,.12) 0%,transparent 70%);animation-delay:-6s}
 @keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1);opacity:.9}33%{transform:translate(2%,3%) scale(1.04);opacity:1}66%{transform:translate(-2%,-2%) scale(.97);opacity:.8}}
-.mockup-wrap{position:relative;z-index:1;width:min(1380px,98vw);border-radius:28px;overflow:hidden;background:#fff}
+.mockup-wrap{position:relative;z-index:1;width:min(1380px,98vw,calc((100vh - 16px)*1.6854));border-radius:28px;overflow:hidden;background:#fff}
 .macbook-img{width:100%;display:block;pointer-events:none;user-select:none;border-radius:28px}
 .screen-iframe{position:absolute;left:10.18%;top:3.46%;width:79.56%;height:86.04%;border:none;border-radius:10px 10px 2px 2px;overflow:hidden;background:#000}
 @media (max-width:768px){
