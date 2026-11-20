@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VNboards — Phần mềm tra cứu sơ đồ bo mạch điện thoại &amp; laptop</title>
+<meta name="description" content="VNboards — phần mềm tra cứu sơ đồ bo mạch cho thợ sửa chữa điện thoại và laptop: bấm một chân là sáng cả đường mạch, kèm tên linh kiện và số tổng trở đo sẵn.">
+<style>
+  :root{--bg:#0f172a;--card:#1e293b;--line:#334155;--text:#e2e8f0;--muted:#94a3b8;--accent:#22c55e;--accent2:#38bdf8;--warn:#facc15}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  a{color:var(--accent2)}
+  .wrap{max-width:920px;margin:0 auto;padding:24px 18px 48px}
+  header{padding:36px 0 8px;text-align:center}
+  .badge{display:inline-block;background:#14532d;color:#bbf7d0;border:1px solid #22c55e;border-radius:999px;padding:4px 14px;font-size:13px;font-weight:600}
+  h1{font-size:clamp(28px,5vw,44px);line-height:1.2;margin:16px 0 8px}
+  h1 span{color:var(--accent)}
+  .lead{color:var(--muted);font-size:18px;max-width:680px;margin:0 auto}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:28px 0 8px}
+  .btn{display:inline-block;padding:13px 22px;border-radius:10px;font-weight:700;text-decoration:none;font-size:16px}
+  .btn-primary{background:var(--accent);color:#052e16}
+  .btn-ghost{border:1px solid var(--line);color:var(--text);background:var(--card)}
+  .note{text-align:center;color:var(--muted);font-size:14px}
+  .board{margin:32px auto;max-width:720px;background:#0b1220;border:1px solid var(--line);border-radius:14px;padding:18px}
+  .board svg{width:100%;height:auto;display:block}
+  .board p{margin:10px 0 0;color:var(--muted);font-size:14px;text-align:center}
+  section{margin-top:40px}
+  h2{font-size:24px;margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .card h3{margin:0 0 6px;font-size:18px}
+  .card p{margin:0;color:var(--muted)}
+  .num{font-size:26px}
+  ol,ul{padding-left:22px}
+  li{margin:6px 0}
+  .warn{background:#422006;border:1px solid #a16207;border-radius:12px;padding:16px 18px}
+  .warn strong{color:var(--warn)}
+  code{background:#0b1220;border:1px solid var(--line);border-radius:6px;padding:2px 6px}
+  table{width:100%;border-collapse:collapse}
+  td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{width:150px;color:var(--muted)}
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="badge">Dành cho thợ sửa chữa điện thoại &amp; laptop</span>
+  <h1>VNboards<br><span>Tra cứu sơ đồ bo mạch</span></h1>
+  <p class="lead">Mở bo mạch của từng đời máy, bấm vào một chân là thấy ngay mọi chân khác cùng đường (net), kèm tên linh kiện và số tổng trở đo sẵn — thay cho việc dò tay trên bo thật.</p>
+  <div class="cta">
+    <a class="btn btn-primary" href="https://github.com/Henrybi9/conmat-viewer-data/releases/latest">⬇ Tải VNboards_Setup.exe</a>
+    <a class="btn btn-ghost" href="https://github.com/Henrybi9/conmat-viewer-data">Xem repo gốc trên GitHub</a>
+  </div>
+  <p class="note">Bản mới nhất kiểm chứng ngày 20/11/2026: v1.2.316 — file cài đặt khoảng 99 MB. Chỉ tải từ trang Releases chính thức của tác giả.</p>
+</header>
+
+<div class="board" aria-label="Minh họa bo mạch">
+  <svg viewBox="0 0 720 300" role="img" aria-label="Minh họa: bấm một chân, cả đường mạch sáng đỏ">
+    <rect x="10" y="10" width="700" height="280" rx="12" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+    <rect x="50" y="50" width="120" height="80" rx="6" fill="#1e293b" stroke="#94a3b8"/>
+    <rect x="220" y="50" width="90" height="90" rx="6" fill="#1e293b" stroke="#94a3b8"/>
+    <rect x="360" y="50" width="140" height="60" rx="6" fill="#1e293b" stroke="#94a3b8"/>
+    <rect x="540" y="50" width="130" height="120" rx="6" fill="#1e293b" stroke="#94a3b8"/>
+    <rect x="50" y="180" width="180" height="70" rx="6" fill="#1e293b" stroke="#94a3b8"/>
+    <rect x="280" y="180" width="180" height="70" rx="6" fill="#1e293b" stroke="#94a3b8"/>
+    <rect x="510" y="200" width="160" height="50" rx="6" fill="#1e293b" stroke="#94a3b8"/>
+    <path d="M170 90 H220 M310 95 H360 M500 80 H540 M140 130 V180 M370 110 V180 M605 170 V200" stroke="#f87171" stroke-width="5" fill="none"/>
+    <circle cx="170" cy="90" r="10" fill="#ef4444"/><circle cx="220" cy="90" r="8" fill="#ef4444"/>
+    <circle cx="310" cy="95" r="8" fill="#ef4444"/><circle cx="360" cy="95" r="8" fill="#ef4444"/>
+    <circle cx="140" cy="180" r="8" fill="#ef4444"/><circle cx="370" cy="180" r="8" fill="#ef4444"/>
+    <circle cx="605" cy="200" r="8" fill="#ef4444"/>
+    <text x="56" y="72" fill="#e2e8f0" font-size="13">U1401</text>
+    <text x="226" y="72" fill="#e2e8f0" font-size="13">C1801</text>
+    <text x="366" y="72" fill="#e2e8f0" font-size="13">U2200</text>
+    <text x="56" y="202" fill="#e2e8f0" font-size="13">C2405</text>
+  </svg>
+  <p>Minh họa: bấm một chân → mọi chân cùng đường sáng đỏ trên cả hai mặt bo.</p>
+</div>
+
+<section>
+  <h2>Phần mềm làm được gì</h2>
+  <div class="grid">
+    <div class="card"><div class="num">📱</div><h3>Toàn bộ bo mạch, cả 2 mặt</h3><p>Mở model nào là thấy trọn bo: chân linh kiện, viền linh kiện, tên net. Cuộn chuột để phóng to, kéo để di chuyển.</p></div>
+    <div class="card"><div class="num">🔴</div><h3>Bấm 1 chân → sáng cả đường mạch</h3><p>Mọi chân cùng đường sáng đỏ trên cả 2 mặt bo. Chấm đỏ tự phồng to khi thu nhỏ, nên ở mức nhìn toàn cảnh vẫn thấy rõ đường đó chạy đi đâu.</p></div>
+    <div class="card"><div class="num">🔎</div><h3>Tên linh kiện + số tổng trở ngay trên bo</h3><p>Phóng to là hiện số chân, tên net, tên linh kiện (C1801, U1401…) và số tổng trở đo sẵn của từng chân — khỏi tra bảng riêng.</p></div>
+    <div class="card"><div class="num">🩺</div><h3>Bảng bệnh — hướng dẫn đo theo từng lỗi</h3><p>Chọn loại bệnh (không lên nguồn, lỗi sóng, lỗi WiFi, lỗi camera…) → phần mềm liệt kê các bước đo có thứ tự, ghi rõ đúng thì phải ra bao nhiêu, sai thì kiểm chỗ nào, và tô đúng màu đó lên chân thật trên bo.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Tải và cài đặt</h2>
+  <ol>
+    <li>Vào <a href="https://github.com/Henrybi9/conmat-viewer-data/releases">trang Releases</a> → kéo xuống mục <strong>Assets</strong> → tải <code>VNboards_Setup.exe</code>. File <code>VNboards_Update.zip</code> nằm cạnh đó là để app tự cập nhật, bạn không cần tải.</li>
+    <li>Chạy <code>VNboards_Setup.exe</code> → <strong>Next</strong> → chọn nơi cài (để mặc định là được) → <strong>Install</strong>. Không cần quyền Administrator. Cài xong app tự mở.</li>
+    <li>Mở app → tab <strong>Đăng ký</strong> → nhập <strong>email thật</strong> của bạn. Mật khẩu được gửi tự động về hộp thư trong vài giây — không thấy thì kiểm tra mục Spam / Quảng cáo. Đăng nhập bằng email + mật khẩu đó là dùng được ngay.</li>
+  </ol>
+  <div class="warn">
+    <strong>⚠ Lưu ý khi Windows chặn file:</strong> Phần mềm chưa có chứng chỉ ký số của Microsoft nên Windows có thể hiện cảnh báo “Windows protected your PC” hoặc Windows Security báo và xóa file. Theo hướng dẫn của tác giả, đây là báo nhầm: bấm <strong>More info → Run anyway</strong>, hoặc khôi phục file từ mục cách ly (Protection history) rồi thêm thư mục cài đặt vào Exclusions. Chỉ tải từ trang Releases chính thức, không tải từ link lạ.
+  </div>
+</section>
+
+<section>
+  <h2>Yêu cầu &amp; sử dụng</h2>
+  <table>
+    <tr><td>Hệ điều hành</td><td>Windows 10/11 (64-bit).</td></tr>
+    <tr><td>Tài khoản</td><td>Bắt buộc, để mở nội dung mạch. Mỗi tài khoản đăng nhập trên <strong>một máy tại một thời điểm</strong>. Gõ email thật cẩn thận — mật khẩu và “Quên mật khẩu” đều gửi về đúng địa chỉ đó, gõ sai là không lấy lại được.</td></tr>
+    <tr><td>Ngôn ngữ</td><td>Tiếng Việt và tiếng Anh. Đổi bằng nút ⚙ Cài đặt ở đầu app — app sẽ mở lại bằng ngôn ngữ vừa chọn.</td></tr>
+    <tr><td>Cập nhật</td><td>App tự kiểm tra bản mới khi mở lên và hiện nút <strong>Cập nhật</strong> ở góc trên bên phải. Bấm là tự tải, tự thay, tự mở lại — không cần cài lại từ đầu.</td></tr>
+    <tr><td>Gỡ cài đặt</td><td>Settings → Apps → Installed apps → <strong>VNboards</strong> → Uninstall.</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Liên hệ tác giả</h2>
+  <p>Hỏi trước khi tải, hỏi về board của máy nào đã có, hay cần hỗ trợ: 📧 <a href="mailto:vnboardsservice@gmail.com">vnboardsservice@gmail.com</a></p>
+  <p>Khách đã cài phần mềm thì nhắn thẳng trong app (nút <strong>☎ Liên hệ</strong> ở màn hình đăng nhập) — nhanh hơn, và admin trả lời ngay trong cửa sổ đó.</p>
+</section>
+
+<section>
+  <h2>Bản quyền</h2>
+  <p>VNboards là phần mềm thương mại có bản quyền của tác giả Henrybi9, <strong>không phải mã nguồn mở</strong>. Trang này chỉ giới thiệu và dẫn link tải chính thức — không chứa mã nguồn, không chứa dữ liệu bo mạch. Nghiêm cấm dịch ngược, giải mã, sao chép logic, hoặc dựng lại phần mềm tương tự / cạnh tranh nếu không có sự cho phép bằng văn bản của tác giả. Chi tiết đầy đủ trong <a href="https://github.com/Henrybi9/conmat-viewer-data/blob/main/LICENSE.txt">LICENSE.txt</a> của repo gốc.</p>
+  <p>Nguồn: <a href="https://github.com/Henrybi9/conmat-viewer-data">github.com/Henrybi9/conmat-viewer-data</a></p>
+</section>
+
+<footer>
+  Trang giới thiệu VNboards — nội dung theo README của repo gốc, cập nhật ngày 20/11/2026.
+</footer>
+
+</div>
+</body>
+</html>
