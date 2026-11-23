@@ -230,6 +230,24 @@
       .dl-card p{margin:0;font-size:14px;color:var(--ink-2);flex:1}
       .dl-card a{font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:8px 0;min-height:40px}
       .dl-card a:hover{text-decoration:underline}
+      /* Luồng chính 3 bước + mục chi tiết thu gọn */
+      .quick-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:6px 0 8px}
+      @media(max-width:760px){.quick-flow{grid-template-columns:1fr}}
+      .qf-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+      .qf-card .num{width:40px;height:40px;border-radius:11px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;margin-bottom:12px}
+      @media(prefers-color-scheme:dark){.qf-card .num{color:#06231f}}
+      .qf-card h3{margin:0 0 6px;font-size:17px}
+      .qf-card p{margin:0 0 12px;font-size:14px;color:var(--ink-2)}
+      .flow-step{display:flex;gap:12px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+      .flow-step .num{width:32px;height:32px;border-radius:9px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex:none}
+      @media(prefers-color-scheme:dark){.flow-step .num{color:#06231f}}
+      .flow-step h3{margin:0;font-size:16px}
+      .flow-step p{margin:2px 0 0;font-size:13.5px;color:var(--ink-2)}
+      details.details-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:6px 22px 10px;margin:10px 0 26px;box-shadow:var(--shadow)}
+      details.details-box>summary{cursor:pointer;font-weight:800;font-size:18px;padding:14px 0;min-height:48px;display:flex;align-items:center;gap:8px;list-style:none}
+      details.details-box>summary::-webkit-details-marker{display:none}
+      details.details-box>summary::before{content:'▶';font-size:13px;color:var(--accent-strong)}
+      details.details-box[open]>summary::before{content:'▼'}
       @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
     </style>
   </head>
@@ -271,13 +289,23 @@
         </div>
       </header>
 
+      <!-- LUỒNG CHÍNH 3 BƯỚC -->
+      <section id="luong-chinh" style="padding:10px 0 4px">
+        <div class="quick-flow">
+          <div class="qf-card"><div class="num">1</div><h3>Tìm app</h3><p>Gõ tên app hoặc dán Bundle ID, bấm chọn app là trang tự điền Bundle ID cho anh.</p><a class="btn btn-ghost btn-small" href="#cong-cu" data-focus="q-input">Tìm app ↓</a></div>
+          <div class="qf-card"><div class="num">2</div><h3>Chọn phiên bản</h3><p>Mặc định là bản mới nhất. Muốn bản cũ thì mở mục chọn bản cũ, nhập mã phiên bản.</p><a class="btn btn-ghost btn-small" href="#cong-cu" data-focus="v-mode">Chọn phiên bản ↓</a></div>
+          <div class="qf-card"><div class="num">3</div><h3>Bấm nút Tải IPA</h3><p>Chỉ một nút duy nhất. File tải về tự làm hết: kiểm tra/cài ipatool, đăng nhập Apple ID rồi tải IPA về máy.</p><a class="btn btn-primary btn-small" href="#cong-cu" data-focus="btn-download-ipa">Tải IPA ↓</a></div>
+        </div>
+      </section>
+
       <!-- CÔNG CỤ TRÌNH DUYỆT -->
       <section id="cong-cu">
         <div class="sec-head">
-          <h2>1 · Tìm app &amp; tải IPA ngay trên trình duyệt</h2>
-          <p>Tìm kiếm chạy thẳng trên trang này bằng dữ liệu App Store thật của Apple: gõ tên app hoặc dán Bundle ID, bấm vào app cần tải, chọn phiên bản rồi bấm <b>Tải IPA về máy tính</b>. Trang không có ô đăng nhập Apple ID — bước đăng nhập chỉ diễn ra trong cửa sổ ipatool trên chính máy tính của mình (xem mục Đã mua ở dưới).</p>
+          <h2>1 · Tìm app &amp; tải IPA — chỉ 3 bước</h2>
+          <p>Chỉ 3 bước: tìm app, chọn phiên bản, bấm nút <b>Tải IPA về máy tính</b> duy nhất. Nút tải tạo một file chạy duy nhất — mở file đó trên máy tính, nó tự kiểm tra/cài ipatool, hỏi email Apple ID để đăng nhập rồi tải file .ipa về cùng thư mục. Trang không có ô đăng nhập Apple ID.</p>
         </div>
         <div class="card">
+          <div class="flow-step"><span class="num">1</span><div><h3>Tìm app</h3><p>Gõ tên app hoặc dán Bundle ID ở dưới, bấm chọn app là trang tự điền Bundle ID.</p></div></div>
           <div class="tabs" role="tablist" aria-label="Cách tìm ứng dụng">
             <button class="mode-btn" role="tab" aria-selected="true" data-mode="name">Tìm theo tên app</button>
             <button class="mode-btn" role="tab" aria-selected="false" data-mode="bundle">Tìm theo Bundle ID</button>
@@ -313,6 +341,8 @@
 
           <hr class="divider" />
 
+          <div class="flow-step"><span class="num">2</span><div><h3>Chọn phiên bản</h3><p>Mặc định là bản mới nhất. Muốn bản cũ thì chọn “Bản cũ” và nhập mã external version ID.</p></div></div>
+          <div class="flow-step"><span class="num">3</span><div><h3>Bấm nút Tải IPA duy nhất</h3><p>Chỉ một nút ở cột bên phải. File tải về tự làm hết: kiểm tra/cài ipatool, đăng nhập Apple ID rồi tải IPA về máy — không cần copy từng lệnh nữa.</p></div></div>
           <div class="builder">
             <div>
               <div class="out-label">App đã chọn</div>
@@ -374,7 +404,7 @@
             <div>
               <div class="out-label">Tải IPA về máy tính</div>
               <button class="btn btn-primary dl-big" id="btn-download-ipa" type="button">⬇ Tải IPA về máy tính</button>
-              <div class="status-msg" id="dl-status">Nút này tải về một file chạy tự động cho app + phiên bản đã chọn. Mở file đó trên máy tính, ipatool sẽ hỏi đăng nhập Apple ID (ngay trên máy của mình) rồi tải file .ipa về cùng thư mục. Cần cài ipatool trước — xem mục 3.</div>
+              <div class="status-msg" id="dl-status">Chỉ một nút, một file chạy duy nhất cho app + phiên bản đã chọn. Mở file đó trên máy tính: nó tự kiểm tra ipatool (chưa có thì tự tải/cài bản mới nhất), hỏi email Apple ID để đăng nhập rồi tải file .ipa về cùng thư mục. Không cần copy từng lệnh nữa — muốn xem từng lệnh thì mở mục “Xem hướng dẫn chi tiết” bên dưới.</div>
               <div class="out-label" style="margin-top:14px">Hoặc dán lệnh này vào terminal</div>
               <div class="codebox"><pre><code id="out-download">ipatool download -b com.example.app</code></pre><button class="copy-btn" id="copy-download" type="button">Sao chép</button></div>
               <div class="out-label" style="margin-top:14px">Bộ lệnh đầy đủ từ đầu (đăng nhập → lấy giấy phép → tải)</div>
@@ -382,15 +412,16 @@
 ipatool download -b com.example.app</code></pre><button class="copy-btn" id="copy-full" type="button">Sao chép</button></div>
               <ol class="flow-list">
                 <li>Tìm app ở trên (theo tên hoặc Bundle ID) và bấm chọn.</li>
-                <li>Chọn phiên bản: bản mới nhất, hoặc bản cũ bằng mã external version ID.</li>
-                <li>Bấm “Tải IPA về máy tính” rồi mở file vừa tải — hoặc sao chép bộ lệnh vào terminal.</li>
-                <li>Đăng nhập Apple ID khi ipatool hỏi; file .ipa/.pkg tải xong nằm ngay trong thư mục đó.</li>
+                <li>Chọn phiên bản: mặc định bản mới nhất, cần bản cũ thì chọn “Bản cũ” và nhập mã external version ID.</li>
+                <li>Bấm “Tải IPA về máy tính” rồi mở file vừa tải — file tự kiểm tra/cài ipatool, đăng nhập Apple ID rồi tải .ipa về cùng thư mục.</li>
               </ol>
             </div>
           </div>
         </div>
       </section>
 
+      <details class="details-box" id="chi-tiet">
+        <summary>📖 Xem hướng dẫn chi tiết — 7 bước, bảng lệnh, mục Đã mua, FAQ &amp; cảnh báo FairPlay</summary>
       <!-- ĐÃ MUA -->
       <section id="da-mua">
         <div class="sec-head">
@@ -649,6 +680,8 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
           <p>Chạy lại <code>ipatool auth login</code> để làm mới phiên. Các bản ipatool gần đây hiển thị nguyên văn hộp thoại lỗi của Apple kèm liên kết xử lý (ví dụ yêu cầu xác minh tài khoản), cứ làm theo hướng dẫn đó rồi đăng nhập lại.</p>
         </details>
       </section>
+
+      </details>
 
       <footer>
         <p><b>Nguồn:</b> <a href="https://github.com/majd/ipatool" target="_blank" rel="noopener">github.com/majd/ipatool</a> — dự án mã nguồn mở của majd, giấy phép MIT, viết bằng Go. Số liệu (sao, số bản phát hành) lấy từ repo tại thời điểm dựng trang, 23/11/2026; số phiên bản ipatool trên trang tự cập nhật từ GitHub API mỗi lần mở trang, bản dự phòng khi mất mạng là <span class="ipatool-version">v2.8.1</span>.</p>
@@ -954,41 +987,88 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
       $('copy-full').addEventListener('click', function(){ doCopy($('out-full').textContent, this); });
       $('copy-lv').addEventListener('click', function(){ doCopy($('lv-cmd').textContent, this); });
 
+      function latestAsset(os){
+        var L = window.__ipatoolLatest || null;
+        if(!L) return null;
+        return os === 'win' ? L.win : (os === 'mac' ? L.mac : L.linux);
+      }
+      // Một nút, một file chạy duy nhất: tự kiểm tra/cài ipatool,
+      // hỏi email Apple ID để đăng nhập, rồi tải IPA về thư mục hiện tại.
       function scriptFor(bundle){
         var dl = buildDownloadCmd(bundle);
         var name = state.selected && state.selected.bundleId === bundle ? state.selected.name : bundle;
+        var safeName = String(name).replace(/["\r\n]/g, '');
+        var slug = bundle.replace(/[^a-zA-Z0-9]+/g, '-');
         if(state.scriptOS === 'win'){
-          return { filename: 'tai-ipa-' + bundle.replace(/[^a-zA-Z0-9]+/g, '-') + '.bat', text:
+          var winUrl = latestAsset('win');
+          var dlLine = dl.replace(/^ipatool download/, '"%IPATOOL%" download');
+          var installBlock = winUrl ?
+            '  echo Chua co ipatool, dang tai ban moi nhat tu GitHub...\r\n' +
+            '  powershell -NoProfile -Command "Invoke-WebRequest -Uri \'' + winUrl + '\' -OutFile \'%TEMP%\\ipatool.tar.gz\'"\r\n' +
+            '  if errorlevel 1 (\r\n  echo Khong tai duoc ipatool. Mo trang https://github.com/majd/ipatool/releases de tai tay.\r\n  pause\r\n  exit /b 1\r\n)\r\n' +
+            '  tar -xzf "%TEMP%\\ipatool.tar.gz" -C "%~dp0"\r\n' +
+            '  if not exist "%~dp0ipatool.exe" (\r\n  echo Giai nen khong xong. Mo trang https://github.com/majd/ipatool/releases de tai tay.\r\n  pause\r\n  exit /b 1\r\n)\r\n' +
+            '  set "IPATOOL=%~dp0ipatool.exe"\r\n'
+          : '  echo Chua co ipatool. Mo trang https://github.com/majd/ipatool/releases de tai ban Windows roi mo lai file nay.\r\n  pause\r\n  exit /b 1\r\n';
+          return { filename: 'tai-ipa-' + slug + '.bat', text:
             '@echo off\r\n' +
             'chcp 65001 >nul\r\n' +
-            'title Tai IPA - ' + name.replace(/["\r\n]/g, '') + '\r\n' +
+            'title Tai IPA - ' + safeName + '\r\n' +
+            'cd /d "%~dp0"\r\n' +
             'echo ============================================\r\n' +
             'echo  Tai IPA: ' + bundle + '\r\n' +
-            'echo  Neu chua dang nhap Apple ID, ipatool se bao loi.\r\n' +
-            'echo  Hay chay lenh: ipatool auth login  roi mo lai file nay.\r\n' +
+            'echo  File nay tu lam het: kiem tra/cai ipatool,\r\n' +
+            'echo  dang nhap Apple ID roi tai .ipa ve thu muc nay.\r\n' +
             'echo ============================================\r\n' +
+            'set "IPATOOL=ipatool"\r\n' +
             'where ipatool >nul 2>nul\r\n' +
-            'if errorlevel 1 (\r\n' +
-            '  echo Khong thay ipatool. Tai ban chinh thuc tai: https://github.com/majd/ipatool/releases\r\n' +
-            '  pause\r\n  exit /b 1\r\n)\r\n' +
-            'ipatool purchase -b ' + bundle + ' >nul 2>nul\r\n' +
-            dl + '\r\n' +
+            'if not errorlevel 1 goto :have_ipatool\r\n' +
+            installBlock +
+            ':have_ipatool\r\n' +
+            'echo.\r\n' +
+            'echo Ban da dang nhap Apple ID tren may nay chua?\r\n' +
+            'set /p LOGGED=Nhap Y neu roi, N neu chua (Y/N): \r\n' +
+            'if /i not "%LOGGED%"=="Y" (\r\n' +
+            '  set /p APPLE_EMAIL=Nhap email Apple ID: \r\n' +
+            '  "%IPATOOL%" auth login --email %APPLE_EMAIL%\r\n' +
+            '  if errorlevel 1 (\r\n  echo Dang nhap chua xong, hay mo lai file nay sau khi dang nhap.\r\n  pause\r\n  exit /b 1\r\n)\r\n)\r\n' +
+            '"%IPATOOL%" purchase -b ' + bundle + ' >nul 2>nul\r\n' +
+            dlLine + '\r\n' +
             'if errorlevel 1 (\r\n' +
             '  echo Tai chua xong. Kiem tra dang nhap bang lenh: ipatool auth login\r\n' +
             ') else (\r\n' +
             '  echo Xong! File .ipa/.pkg nam trong thu muc nay.\r\n' +
             ')\r\npause\r\n' };
         }
-        return { filename: 'tai-ipa-' + bundle.replace(/[^a-zA-Z0-9]+/g, '-') + '.sh', text:
+        var shUrl = latestAsset(state.scriptOS);
+        var shDl = dl.replace(/^ipatool download/, '"$IPATOOL" download');
+        var shInstall = '';
+        if(state.scriptOS === 'mac'){
+          shInstall = 'if command -v brew >/dev/null 2>&1; then\n  brew install ipatool\nfi\n';
+        }
+        shInstall += 'if ! command -v ipatool >/dev/null 2>&1; then\n';
+        if(shUrl){
+          shInstall += '  echo "Chua co ipatool, dang tai ban moi nhat tu GitHub..."\n  curl -L -o /tmp/ipatool.tar.gz "' + shUrl + '" && tar -xzf /tmp/ipatool.tar.gz -C "$(dirname "$0")" && chmod +x "$(dirname "$0")/ipatool"\n';
+        } else {
+          shInstall += '  echo "Chua co ipatool. Mo trang https://github.com/majd/ipatool/releases de tai tay roi mo lai file nay."\n  exit 1\n';
+        }
+        shInstall += 'fi\n';
+        return { filename: 'tai-ipa-' + slug + '.sh', text:
           '#!/bin/bash\n' +
-          '# Tai IPA: ' + bundle + (name !== bundle ? ' (' + name.replace(/[\r\n]/g, '') + ')' : '') + '\n' +
+          '# Tai IPA: ' + bundle + (name !== bundle ? ' (' + safeName + ')' : '') + '\n' +
+          '# File nay tu lam het: kiem tra/cai ipatool, dang nhap Apple ID roi tai .ipa ve thu muc nay.\n' +
           'cd "$(dirname "$0")"\n' +
-          'if ! command -v ipatool >/dev/null 2>&1; then\n' +
-          '  echo "Khong thay ipatool. Cai dat: brew install ipatool (macOS) hoac tai tai https://github.com/majd/ipatool/releases"\n' +
-          '  exit 1\nfi\n' +
-          'echo "Neu chua dang nhap Apple ID, hay chay: ipatool auth login roi mo lai file nay."\n' +
-          'ipatool purchase -b ' + bundle + ' >/dev/null 2>&1 || true\n' +
-          'if ' + dl + '; then\n' +
+          'IPATOOL="ipatool"\n' +
+          shInstall +
+          'if ! command -v ipatool >/dev/null 2>&1; then IPATOOL="./ipatool"; fi\n' +
+          'if ! command -v "$IPATOOL" >/dev/null 2>&1 && [ ! -x "$IPATOOL" ]; then echo "Khong tim thay ipatool. Mo trang https://github.com/majd/ipatool/releases de tai tay."; exit 1; fi\n' +
+          'read -p "Ban da dang nhap Apple ID tren may nay chua? (y/n): " LOGGED\n' +
+          'if [ "$LOGGED" != "y" ] && [ "$LOGGED" != "Y" ]; then\n' +
+          '  read -p "Nhap email Apple ID: " APPLE_EMAIL\n' +
+          '  "$IPATOOL" auth login --email "$APPLE_EMAIL" || { echo "Dang nhap chua xong, hay mo lai file nay sau khi dang nhap."; exit 1; }\n' +
+          'fi\n' +
+          '"$IPATOOL" purchase -b ' + bundle + ' >/dev/null 2>&1 || true\n' +
+          'if ' + shDl + '; then\n' +
           '  echo "Xong! File .ipa/.pkg nam trong thu muc nay."\n' +
           'else\n' +
           '  echo "Tai chua xong. Kiem tra dang nhap bang lenh: ipatool auth login"\nfi\n' };
@@ -1217,10 +1297,28 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
               var u = assetUrl(item[1]);
               if(u){ el.href = u; el.textContent = item[2] + ' (' + tag + ') →'; }
             });
+            window.__ipatoolLatest = {tag: tag, win: assetUrl(/windows-amd64\.tar\.gz$/), mac: assetUrl(/macos-arm64\.tar\.gz$/), linux: assetUrl(/linux-amd64\.tar\.gz$/)};
           })
           .catch(function(){ fail(); });
       }
       fetchLatestIpatool();
+
+
+      // Nút ở luồng 3 bước: cuộn tới đúng ô cần làm và focus vào đó
+      document.querySelectorAll('[data-focus]').forEach(function(a){
+        a.addEventListener('click', function(){
+          var el = $(a.getAttribute('data-focus'));
+          if(el) setTimeout(function(){ try{ el.scrollIntoView({behavior:'smooth', block:'center'}); el.focus({preventScroll:true}); }catch(e){} }, 80);
+        });
+      });
+      // Bấm link trỏ vào trong mục chi tiết (vd: "Mục Đã mua" ở hero) thì mở mục đó ra trước
+      document.querySelectorAll('a[href^="#"]').forEach(function(a){
+        a.addEventListener('click', function(){
+          var target = document.querySelector(a.getAttribute('href'));
+          var det = $('chi-tiet');
+          if(target && det && det.contains(target)) det.open = true;
+        });
+      });
 
       renderOutputs();
       renderPurchased();
