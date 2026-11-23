@@ -253,7 +253,8 @@
               <span>Giấy phép <b>MIT</b></span>
               <span>Ngôn ngữ <b>Go</b></span>
               <span><b>41</b> bản phát hành</span>
-              <span>Bản mới nhất <b>v2.8.1</b></span>
+              <span>Bản mới nhất <b class="ipatool-version">v2.8.1</b></span>
+              <span id="latest-check">Đang kiểm tra bản mới nhất…</span>
             </div>
           </div>
           <div class="term" aria-label="Ví dụ lệnh ipatool trong terminal">
@@ -485,7 +486,7 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
 
         <div class="card" style="margin-bottom:14px">
           <h3>Bước 1 — Chuẩn bị máy tính và tải ipatool v2.8.1</h3>
-          <p>Dùng máy tính Windows, macOS hoặc Linux có mạng. Mở trang Releases chính chủ của ipatool và tải đúng bản cho hệ điều hành đang dùng (bản mới nhất hiện là <b>v2.8.1</b>; nếu trang Releases đã có bản mới hơn thì lấy bản mới nhất). Giải nén ra một thư mục riêng, ví dụ <code>Downloads/ipatool</code>. Cách cài chi tiết theo từng hệ điều hành xem ở <b>mục 3</b> phía trên — macOS cài nhanh nhất bằng Homebrew với <code>brew install ipatool</code>.</p>
+          <p>Dùng máy tính Windows, macOS hoặc Linux có mạng. Mở trang Releases chính chủ của ipatool và tải đúng bản cho hệ điều hành đang dùng (bản mới nhất hiện là <b class="ipatool-version">v2.8.1</b>; nếu trang Releases đã có bản mới hơn thì lấy bản mới nhất). Giải nén ra một thư mục riêng, ví dụ <code>Downloads/ipatool</code>. Cách cài chi tiết theo từng hệ điều hành xem ở <b>mục 3</b> phía trên — macOS cài nhanh nhất bằng Homebrew với <code>brew install ipatool</code>.</p>
           <p><a href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener"><b>→ Mở trang Releases chính chủ của majd/ipatool</b></a></p>
           <p class="hint">Chỉ tải từ trang Releases chính chủ này, đừng tải ipatool ở link lạ — bản giả có thể đánh cắp mật khẩu Apple ID của anh.</p>
         </div>
@@ -597,12 +598,13 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
       <section id="tai-xuong">
         <div class="sec-head">
           <h2>7 · Tải ipatool về máy tính</h2>
-          <p>Mọi bản dựng chính thức đều nằm ở trang Releases của repo gốc. Bản mới nhất hiện tại là <b>v2.8.1</b> — bổ sung tải song song, tự nhận diện storefront theo khu vực và cải thiện khôi phục app đã bị gỡ.</p>
+          <p>Mọi bản dựng chính thức đều nằm ở trang Releases của repo gốc. Bản mới nhất hiện tại là <b class="ipatool-version">v2.8.1</b> — bổ sung tải song song, tự nhận diện storefront theo khu vực và cải thiện khôi phục app đã bị gỡ.</p>
+          <p id="latest-release-info" class="hint">Đang kiểm tra bản mới nhất từ GitHub…</p>
         </div>
         <div class="dl-grid">
-          <div class="dl-card"><h3>Windows</h3><p>Tải file Windows amd64 trong mục Assets của bản phát hành, giải nén và chạy ipatool.exe từ PowerShell.</p><a href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener">Tải cho Windows →</a></div>
-          <div class="dl-card"><h3>macOS</h3><p>Cách nhanh nhất là Homebrew: <code>brew install ipatool</code>. Cũng có bản dựng sẵn trong Releases nếu không dùng Homebrew.</p><a href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener">Tải cho macOS →</a></div>
-          <div class="dl-card"><h3>Linux</h3><p>Tải file Linux amd64/arm64 trong mục Assets, cấp quyền chạy bằng chmod +x rồi dùng trong terminal.</p><a href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener">Tải cho Linux →</a></div>
+          <div class="dl-card"><h3>Windows</h3><p>Tải file Windows amd64 trong mục Assets của bản phát hành, giải nén và chạy ipatool.exe từ PowerShell.</p><a id="dl-win" href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener">Tải cho Windows →</a></div>
+          <div class="dl-card"><h3>macOS</h3><p>Cách nhanh nhất là Homebrew: <code>brew install ipatool</code>. Cũng có bản dựng sẵn trong Releases nếu không dùng Homebrew.</p><a id="dl-mac" href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener">Tải cho macOS →</a></div>
+          <div class="dl-card"><h3>Linux</h3><p>Tải file Linux amd64/arm64 trong mục Assets, cấp quyền chạy bằng chmod +x rồi dùng trong terminal.</p><a id="dl-linux" href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener">Tải cho Linux →</a></div>
         </div>
       </section>
 
@@ -649,7 +651,7 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
       </section>
 
       <footer>
-        <p><b>Nguồn:</b> <a href="https://github.com/majd/ipatool" target="_blank" rel="noopener">github.com/majd/ipatool</a> — dự án mã nguồn mở của majd, giấy phép MIT, viết bằng Go. Số liệu (sao, số bản phát hành, bản mới nhất v2.8.1) lấy từ repo tại thời điểm dựng trang, 23/11/2026.</p>
+        <p><b>Nguồn:</b> <a href="https://github.com/majd/ipatool" target="_blank" rel="noopener">github.com/majd/ipatool</a> — dự án mã nguồn mở của majd, giấy phép MIT, viết bằng Go. Số liệu (sao, số bản phát hành) lấy từ repo tại thời điểm dựng trang, 23/11/2026; số phiên bản ipatool trên trang tự cập nhật từ GitHub API mỗi lần mở trang, bản dự phòng khi mất mạng là <span class="ipatool-version">v2.8.1</span>.</p>
         <p>Tìm kiếm trên trang dùng dữ liệu App Store công khai của Apple và chạy ngay trong trình duyệt; danh sách Đã mua do người dùng tự nạp từ ipatool trên máy của họ và chỉ nằm trong tab đang mở. Việc tải app diễn ra bằng ipatool trên máy tính của người dùng, với Apple ID của chính họ.</p>
       </footer>
     </div>
@@ -1163,6 +1165,62 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
         renderPurchased();
       });
       $('p-filter').addEventListener('input', renderPurchased);
+
+
+      // ---------- ipatool: luôn hiển thị bản mới nhất ----------
+      // Mỗi lần mở trang, gọi API công khai của GitHub để lấy bản mới nhất.
+      // Không cần sửa tay khi có bản mới. Mất mạng / GitHub chặn -> giữ
+      // bản dự phòng v2.8.1 và ghi rõ, không bịa số phiên bản.
+      var IPATOOL_FALLBACK = 'v2.8.1';
+      var IPATOOL_RELEASES = 'https://github.com/majd/ipatool/releases';
+      function setIpatoolVersion(tag){
+        document.querySelectorAll('.ipatool-version').forEach(function(el){ el.textContent = tag; });
+      }
+      function fetchLatestIpatool(){
+        var checkEl = $('latest-check');
+        var infoEl = $('latest-release-info');
+        function fail(msg){
+          setIpatoolVersion(IPATOOL_FALLBACK);
+          if(checkEl) checkEl.textContent = 'Đang hiện bản dự phòng ' + IPATOOL_FALLBACK + ' — kiểm tra lại khi có mạng.';
+          if(infoEl) infoEl.textContent = 'Không kết nối được tới GitHub lúc mở trang nên đang hiện bản dự phòng ' + IPATOOL_FALLBACK + ' — kiểm tra lại khi có mạng.';
+        }
+        if(!window.fetch){ fail(); return; }
+        fetch('https://api.github.com/repos/majd/ipatool/releases/latest', {headers:{'Accept':'application/vnd.github+json'}})
+          .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+          .then(function(d){
+            var tag = (d && d.tag_name) ? String(d.tag_name) : IPATOOL_FALLBACK;
+            setIpatoolVersion(tag);
+            var pub = d && d.published_at ? fmtDate(d.published_at) : '';
+            var checked = new Date().toLocaleDateString('vi-VN');
+            var relUrl = (d && d.html_url) || (IPATOOL_RELEASES + '/tag/' + tag);
+            if(checkEl) checkEl.textContent = 'Đã kiểm tra ' + checked + ' · phát hành ' + (pub || '—');
+            if(infoEl){
+              infoEl.innerHTML = 'Bản mới nhất: <b>' + escHtml(tag) + '</b>' +
+                (pub ? ' · phát hành ' + escHtml(pub) : '') +
+                ' · kiểm tra lúc ' + escHtml(checked) +
+                ' · <a href="' + escHtml(relUrl) + '" target="_blank" rel="noopener">xem ghi chú phát hành ↗</a>';
+            }
+            var assets = (d && d.assets) || [];
+            function assetUrl(re){
+              for(var i=0;i<assets.length;i++){
+                if(re.test(assets[i].name || '')) return assets[i].browser_download_url;
+              }
+              return null;
+            }
+            var links = [
+              ['dl-win', /windows-amd64\.tar\.gz$/, 'Tải cho Windows'],
+              ['dl-mac', /macos-arm64\.tar\.gz$/, 'Tải cho macOS'],
+              ['dl-linux', /linux-amd64\.tar\.gz$/, 'Tải cho Linux']
+            ];
+            links.forEach(function(item){
+              var el = $(item[0]); if(!el) return;
+              var u = assetUrl(item[1]);
+              if(u){ el.href = u; el.textContent = item[2] + ' (' + tag + ') →'; }
+            });
+          })
+          .catch(function(){ fail(); });
+      }
+      fetchLatestIpatool();
 
       renderOutputs();
       renderPurchased();
