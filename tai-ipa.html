@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Tải IPA về máy tính — ipatool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --bg:#f3f4f1;
+        --bg-soft:#e9ebe6;
+        --surface:#ffffff;
+        --surface-2:#f7f7f4;
+        --ink:#171a1f;
+        --ink-2:#4b5563;
+        --ink-3:#6b7280;
+        --line:#dde0d9;
+        --accent:#0f766e;
+        --accent-strong:#0b5e57;
+        --accent-soft:#e0f2ef;
+        --term-bg:#101418;
+        --term-ink:#e6edf3;
+        --term-dim:#8b98a5;
+        --term-green:#3fb950;
+        --term-cyan:#39c5cf;
+        --warn-bg:#fff7e6;
+        --warn-line:#f0d48a;
+        --warn-ink:#7a5a12;
+        --warn-strong:#5c430a;
+        --err:#b3261e;
+        --shadow:0 10px 30px rgba(20,30,25,.08);
+        --radius:14px;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#0d1114;
+          --bg-soft:#12171b;
+          --surface:#151b1f;
+          --surface-2:#1a2126;
+          --ink:#eef2f0;
+          --ink-2:#b6c0ba;
+          --ink-3:#8a968f;
+          --line:#27313a;
+          --accent:#2dd4bf;
+          --accent-strong:#5eead4;
+          --accent-soft:#12312e;
+          --term-bg:#0a0e11;
+          --term-ink:#e6edf3;
+          --warn-bg:#2a2210;
+          --warn-line:#6b5518;
+          --warn-ink:#f0d48a;
+          --warn-strong:#ffe9a8;
+          --err:#f28b82;
+          --shadow:0 10px 30px rgba(0,0,0,.35);
+        }
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;font-family:"Be Vietnam Pro",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+      a{color:var(--accent-strong)}
+      button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2.5rem}
+      .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+      /* HERO */
+      .hero{padding:44px 0 28px}
+      .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:start}
+      @media(max-width:860px){.hero-grid{grid-template-columns:1fr}}
+      .tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;letter-spacing:.02em;background:var(--accent-soft);color:var(--accent-strong);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+      .tag i{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+      h1{font-size:clamp(30px,4.6vw,46px);line-height:1.12;letter-spacing:-.02em;margin:16px 0 14px;font-weight:800}
+      h1 .hl{color:var(--accent-strong)}
+      .lead{font-size:17px;color:var(--ink-2);margin:0 0 20px;max-width:56ch}
+      .cta-row{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 18px}
+      .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:.15s;font-family:inherit}
+      .btn-primary{background:var(--accent);color:#fff}
+      .btn-primary:hover{background:var(--accent-strong)}
+      @media(prefers-color-scheme:dark){.btn-primary{color:#06231f}}
+      .btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+      .btn-ghost:hover{border-color:var(--accent)}
+      .btn-small{min-height:44px;padding:0 16px;font-size:14px}
+      .meta-row{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13.5px;color:var(--ink-3);margin-top:6px}
+      .meta-row b{color:var(--ink);font-weight:700}
+      /* Terminal */
+      .term{background:var(--term-bg);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid #222b33}
+      .term-bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#171d22;border-bottom:1px solid #222b33}
+      .term-bar span{width:11px;height:11px;border-radius:50%;display:block}
+      .term-bar .r{background:#ff5f57}.term-bar .y{background:#febc2e}.term-bar .g{background:#28c840}
+      .term-bar em{font-style:normal;color:#8b98a5;font-family:"JetBrains Mono",monospace;font-size:12px;margin-left:8px}
+      .term-body{padding:18px 18px 20px;font-family:"JetBrains Mono",monospace;font-size:13.5px;line-height:1.9;color:var(--term-ink)}
+      .term-body div{white-space:normal;overflow-wrap:anywhere}
+      .term-body .p{color:var(--term-green)}
+      .term-body .c{color:var(--term-cyan)}
+      .term-body .d{color:var(--term-dim)}
+      .term-body .o{color:#d6b656}
+      /* Sections */
+      section{padding:26px 0}
+      .sec-head{margin-bottom:18px}
+      .sec-head h2{font-size:24px;letter-spacing:-.01em;margin:0 0 6px;font-weight:800}
+      .sec-head p{margin:0;color:var(--ink-2);max-width:68ch}
+      .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+      /* OS tabs */
+      .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+      .tab-btn{min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-family:inherit;font-weight:600;font-size:14.5px;cursor:pointer}
+      .tab-btn[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+      .tab-panel{display:none}
+      .tab-panel.active{display:block}
+      .tab-panel h3{margin:0 0 6px;font-size:16px}
+      .tab-panel p{margin:0 0 12px;color:var(--ink-2);font-size:14.5px}
+      /* Code block */
+      .codebox{position:relative;background:var(--term-bg);border-radius:10px;border:1px solid #222b33;margin:10px 0}
+      .codebox pre{margin:0;padding:16px 52px 16px 16px;overflow-x:auto}
+      .codebox code{font-family:"JetBrains Mono",monospace;font-size:13.5px;color:var(--term-ink);white-space:pre}
+      .copy-btn{position:absolute;top:8px;right:8px;min-height:36px;min-width:64px;padding:0 12px;border-radius:8px;border:1px solid #2c3742;background:#1c242b;color:#cfe3dc;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+      .copy-btn:hover{background:#26313a}
+      .copy-btn.done{background:var(--accent);color:#fff;border-color:var(--accent)}
+      .hint{font-size:13.5px;color:var(--ink-3)}
+      /* Steps */
+      .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+      .steps.cols-3{grid-template-columns:repeat(3,1fr)}
+      @media(max-width:900px){.steps{grid-template-columns:repeat(2,1fr)}.steps.cols-3{grid-template-columns:1fr}}
+      @media(max-width:520px){.steps{grid-template-columns:1fr}}
+      .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+      .step .num{width:34px;height:34px;border-radius:9px;background:var(--accent-soft);color:var(--accent-strong);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;margin-bottom:10px}
+      .step h3{margin:0 0 6px;font-size:15.5px}
+      .step p{margin:0;font-size:14px;color:var(--ink-2)}
+      .step code{font-family:"JetBrains Mono",monospace;font-size:12.5px;background:var(--surface-2);border:1px solid var(--line);padding:1px 6px;border-radius:6px;word-break:break-all}
+      /* Builder / tool layout */
+      .builder{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+      @media(max-width:860px){.builder{grid-template-columns:1fr}}
+      .field{margin-bottom:14px}
+      .field label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px}
+      .field input,.field select{width:100%;min-height:48px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-family:inherit;font-size:15px}
+      .field input:focus,.field select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+      .field .sub{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+      .seg{display:flex;flex-wrap:wrap;gap:6px}
+      .seg button{min-height:40px;padding:0 13px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer}
+      .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+      @media(prefers-color-scheme:dark){.seg button[aria-pressed="true"]{color:#06231f}}
+      .out-label{font-size:13.5px;font-weight:600;margin-bottom:6px}
+      .flow-list{margin:14px 0 0;padding:0;list-style:none;counter-reset:fl}
+      .flow-list li{font-size:14px;color:var(--ink-2);padding:7px 0 7px 30px;position:relative;border-top:1px dashed var(--line)}
+      .flow-list li:first-child{border-top:none}
+      .flow-list li::before{counter-increment:fl;content:counter(fl);position:absolute;left:0;top:7px;width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent-strong);font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+      /* Browser tool: search + results */
+      .mode-btn{min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-family:inherit;font-weight:600;font-size:14.5px;cursor:pointer}
+      .mode-btn[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+      @media(prefers-color-scheme:dark){.mode-btn[aria-selected="true"]{color:#06231f}}
+      .search-row{display:flex;flex-wrap:wrap;gap:10px}
+      .search-row input[type="text"]{flex:1 1 200px;min-height:48px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-family:inherit;font-size:15px}
+      .search-row select{min-height:48px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-family:inherit;font-size:14.5px}
+      .search-row input:focus,.search-row select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+      .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+      .chips span{font-size:13px;color:var(--ink-3)}
+      .chips button{min-height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer}
+      .chips button:hover{border-color:var(--accent);color:var(--accent-strong)}
+      .status-msg{font-size:13.5px;color:var(--ink-3);margin-top:10px;min-height:20px}
+      .status-msg.err{color:var(--err)}
+      .status-msg.ok{color:var(--accent-strong)}
+      .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+      @media(max-width:760px){.results-grid{grid-template-columns:1fr}}
+      .app-card{display:flex;gap:12px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px;width:100%;text-align:left;font-family:inherit;color:var(--ink);cursor:pointer;align-items:flex-start}
+      .app-card:hover{border-color:var(--accent)}
+      .app-card.selected{border-color:var(--accent);outline:2px solid var(--accent)}
+      .app-card img{width:60px;height:60px;border-radius:14px;flex:none;background:var(--bg-soft);object-fit:cover}
+      .app-card .ai{min-width:0;flex:1}
+      .app-card h4{margin:0;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .app-card .dev{font-size:13px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .app-card .bid{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-3);word-break:break-all}
+      .app-card .meta{font-size:12.5px;color:var(--ink-2);margin-top:4px;display:flex;flex-wrap:wrap;gap:3px 10px}
+      .divider{border:none;border-top:1px dashed var(--line);margin:22px 0}
+      .sel-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:10px}
+      .sel-head img{width:76px;height:76px;border-radius:18px;background:var(--bg-soft);object-fit:cover;flex:none}
+      .sel-head h3{margin:0 0 2px;font-size:18px}
+      .sel-head .dev{font-size:13.5px;color:var(--ink-2)}
+      .sel-head .bid{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-3);word-break:break-all}
+      .sel-meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+      .sel-meta span{font-size:12.5px;font-weight:600;background:var(--accent-soft);color:var(--accent-strong);padding:3px 10px;border-radius:999px}
+      .sel-desc{font-size:13.5px;color:var(--ink-2);max-height:96px;overflow:hidden;margin:6px 0 14px}
+      .dl-big{width:100%;min-height:56px;font-size:16px;margin-top:6px}
+      /* Purchased */
+      textarea.ta{width:100%;min-height:110px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-family:"JetBrains Mono",monospace;font-size:12.5px;resize:vertical;line-height:1.55}
+      textarea.ta:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+      .import-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;align-items:center}
+      .import-actions input[type="file"]{font-size:13.5px;color:var(--ink-2);max-width:100%}
+      .empty-box{border:1.5px dashed var(--line);border-radius:12px;padding:22px;text-align:center;color:var(--ink-3);font-size:14.5px;margin-top:14px}
+      .p-card{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px}
+      .p-card .top{display:flex;gap:12px;align-items:flex-start}
+      .p-card img{width:56px;height:56px;border-radius:13px;background:var(--bg-soft);object-fit:cover;flex:none}
+      .p-card h4{margin:0;font-size:14.5px}
+      .p-card .bid{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-3);word-break:break-all}
+      .p-card .meta{font-size:12.5px;color:var(--ink-2);margin-top:3px}
+      .p-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+      .p-actions button{min-height:40px;padding:0 13px;border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:#fff}
+      @media(prefers-color-scheme:dark){.p-actions button{color:#06231f}}
+      .p-actions button.ghost2{background:var(--surface);color:var(--ink);border-color:var(--line)}
+      .p-actions button.ghost2:hover{border-color:var(--accent)}
+      /* Commands grid */
+      .cmd-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+      @media(max-width:760px){.cmd-grid{grid-template-columns:1fr}}
+      .cmd-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+      .cmd-card h3{margin:0 0 4px;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+      .cmd-card h3 code{font-family:"JetBrains Mono",monospace;font-size:14px;color:var(--accent-strong)}
+      .cmd-card p{margin:0 0 10px;font-size:14px;color:var(--ink-2)}
+      .cmd-card .ex{font-family:"JetBrains Mono",monospace;font-size:12.5px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:9px 11px;overflow-x:auto;white-space:nowrap;color:var(--ink)}
+      .pill{font-size:11px;font-weight:700;letter-spacing:.03em;background:var(--accent-soft);color:var(--accent-strong);padding:2px 8px;border-radius:999px}
+      /* Warning */
+      .warn{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:var(--radius);padding:22px}
+      .warn h2{margin:0 0 10px;font-size:19px;color:var(--warn-strong)}
+      .warn p,.warn li{color:var(--warn-ink);font-size:14.5px}
+      .warn ul{margin:8px 0 0;padding-left:20px}
+      .warn li{margin:5px 0}
+      .warn b{color:var(--warn-strong)}
+      .warn-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+      @media(max-width:760px){.warn-grid{grid-template-columns:1fr}}
+      .warn-grid h3{margin:0 0 6px;font-size:15px;color:var(--warn-strong)}
+      /* FAQ */
+      details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px 18px;margin-bottom:10px}
+      summary{cursor:pointer;font-weight:600;font-size:15px;padding:12px 0;min-height:44px;display:flex;align-items:center}
+      details p{margin:0 0 14px;color:var(--ink-2);font-size:14.5px}
+      details code{font-family:"JetBrains Mono",monospace;font-size:12.5px;background:var(--surface-2);border:1px solid var(--line);padding:1px 6px;border-radius:6px}
+      footer{padding:30px 0 44px;border-top:1px solid var(--line);margin-top:10px}
+      footer p{font-size:13.5px;color:var(--ink-3);margin:4px 0}
+      .dl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+      @media(max-width:760px){.dl-grid{grid-template-columns:1fr}}
+      .dl-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:6px}
+      .dl-card h3{margin:0;font-size:16px}
+      .dl-card p{margin:0;font-size:14px;color:var(--ink-2);flex:1}
+      .dl-card a{font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:8px 0;min-height:40px}
+      .dl-card a:hover{text-decoration:underline}
+      @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <!-- HERO -->
+      <header class="hero">
+        <div class="hero-grid">
+          <div>
+            <span class="tag"><i></i> Trang cá nhân · Công cụ mã nguồn mở</span>
+            <h1>Tải file <span class="hl">.ipa</span> về máy tính bằng ipatool</h1>
+            <p class="lead">Tìm app ngay trên trình duyệt này — theo <b>tên app</b> hoặc <b>Bundle ID</b> — chọn <b>phiên bản</b>, xem lại <b>app đã mua</b> rồi tải gói <b>.ipa</b> (iOS, iPadOS, tvOS, watchOS, visionOS) hoặc <b>.pkg</b> (macOS) về máy tính bằng ipatool của tác giả <b>majd</b>. Không cần iPhone, không cần iTunes.</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="#cong-cu">🔍 Tìm app &amp; tải IPA ↓</a>
+              <a class="btn btn-ghost" href="#da-mua">Mục Đã mua</a>
+              <a class="btn btn-ghost" href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener">⬇ Tải ipatool (Releases)</a>
+            </div>
+            <div class="meta-row">
+              <span>★ <b>12.439</b> sao</span>
+              <span>Giấy phép <b>MIT</b></span>
+              <span>Ngôn ngữ <b>Go</b></span>
+              <span><b>41</b> bản phát hành</span>
+              <span>Bản mới nhất <b>v2.8.1</b></span>
+            </div>
+          </div>
+          <div class="term" aria-label="Ví dụ lệnh ipatool trong terminal">
+            <div class="term-bar"><span class="r"></span><span class="y"></span><span class="g"></span><em>Terminal — ipatool</em></div>
+            <div class="term-body">
+              <div><span class="p">$</span> ipatool <span class="c">auth login</span> --email ban@icloud.com</div>
+              <div><span class="d"># nhập mật khẩu + mã xác thực 2 bước…</span></div>
+              <div><span class="p">$</span> ipatool <span class="c">search</span> "YouTube" --limit 5</div>
+              <div><span class="o">com.google.ios.youtube — YouTube</span></div>
+              <div><span class="p">$</span> ipatool <span class="c">download</span> -b com.google.ios.youtube</div>
+              <div><span class="d"># ✓ Đã lưu: com.google.ios.youtube.ipa</span></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- CÔNG CỤ TRÌNH DUYỆT -->
+      <section id="cong-cu">
+        <div class="sec-head">
+          <h2>1 · Tìm app &amp; tải IPA ngay trên trình duyệt</h2>
+          <p>Tìm kiếm chạy thẳng trên trang này bằng dữ liệu App Store thật của Apple: gõ tên app hoặc dán Bundle ID, bấm vào app cần tải, chọn phiên bản rồi bấm <b>Tải IPA về máy tính</b>. Trang không có ô đăng nhập Apple ID — bước đăng nhập chỉ diễn ra trong cửa sổ ipatool trên chính máy tính của mình (xem mục Đã mua ở dưới).</p>
+        </div>
+        <div class="card">
+          <div class="tabs" role="tablist" aria-label="Cách tìm ứng dụng">
+            <button class="mode-btn" role="tab" aria-selected="true" data-mode="name">Tìm theo tên app</button>
+            <button class="mode-btn" role="tab" aria-selected="false" data-mode="bundle">Tìm theo Bundle ID</button>
+          </div>
+          <div class="search-row">
+            <input id="q-input" type="text" placeholder="Ví dụ: YouTube, CapCut, TikTok…" autocomplete="off" spellcheck="false" aria-label="Từ khóa tìm kiếm" />
+            <select id="q-entity" aria-label="Loại ứng dụng">
+              <option value="software">App iPhone / iPad</option>
+              <option value="macSoftware">App macOS</option>
+            </select>
+            <select id="q-country" aria-label="Khu vực App Store">
+              <option value="VN" selected>Việt Nam</option>
+              <option value="US">Hoa Kỳ</option>
+              <option value="SG">Singapore</option>
+              <option value="JP">Nhật Bản</option>
+              <option value="KR">Hàn Quốc</option>
+              <option value="AU">Úc</option>
+              <option value="GB">Anh</option>
+            </select>
+            <button class="btn btn-primary btn-small" id="q-btn" type="button">Tìm kiếm</button>
+          </div>
+          <div class="chips">
+            <span>Gợi ý:</span>
+            <button type="button" data-q="YouTube">YouTube</button>
+            <button type="button" data-q="TikTok">TikTok</button>
+            <button type="button" data-q="CapCut">CapCut</button>
+            <button type="button" data-q="Facebook">Facebook</button>
+            <button type="button" data-q="Spotify">Spotify</button>
+          </div>
+          <div class="status-msg" id="q-status" role="status">Nhập tên app (hoặc chuyển sang tab Bundle ID rồi dán mã) và bấm Tìm kiếm.</div>
+          <div class="results-grid" id="results-grid"></div>
+          <div class="empty-box" id="results-empty">Chưa có kết quả. Kết quả tìm kiếm từ App Store sẽ hiện ở đây — bấm vào một app để chọn tải.</div>
+
+          <hr class="divider" />
+
+          <div class="builder">
+            <div>
+              <div class="out-label">App đã chọn</div>
+              <div id="sel-placeholder" class="empty-box" style="margin:0 0 14px">Chưa chọn app nào. Bấm vào một kết quả ở trên, hoặc tự điền Bundle ID ở ô dưới.</div>
+              <div id="sel-detail" style="display:none">
+                <div class="sel-head">
+                  <img id="sel-icon" alt="" />
+                  <div style="min-width:0">
+                    <h3 id="sel-name">—</h3>
+                    <div class="dev" id="sel-dev">—</div>
+                    <div class="bid" id="sel-bid">—</div>
+                  </div>
+                </div>
+                <div class="sel-meta" id="sel-meta"></div>
+                <p class="sel-desc" id="sel-desc"></p>
+              </div>
+              <div class="field">
+                <label for="f-bundle">Bundle ID của ứng dụng *</label>
+                <input id="f-bundle" type="text" placeholder="Ví dụ: com.google.ios.youtube" autocomplete="off" spellcheck="false" />
+                <div class="sub">Điền tay nếu đã biết Bundle ID — khỏi cần tìm kiếm.</div>
+              </div>
+              <div class="field">
+                <label>Nền tảng</label>
+                <div class="seg" id="f-platform">
+                  <button type="button" data-p="" aria-pressed="true">iOS / iPadOS</button>
+                  <button type="button" data-p="macos" aria-pressed="false">macOS (.pkg)</button>
+                  <button type="button" data-p="appletv" aria-pressed="false">tvOS</button>
+                  <button type="button" data-p="watchos" aria-pressed="false">watchOS</button>
+                  <button type="button" data-p="visionos" aria-pressed="false">visionOS</button>
+                </div>
+              </div>
+              <div class="field">
+                <label for="v-mode">Phiên bản muốn tải</label>
+                <select id="v-mode">
+                  <option value="latest" selected>Bản mới nhất</option>
+                  <option value="old">Bản cũ — theo mã external version ID</option>
+                </select>
+                <div class="sub" id="v-latest-info">Chưa chọn app nên chưa rõ số phiên bản mới nhất.</div>
+              </div>
+              <div class="field" id="v-old-wrap" style="display:none">
+                <label for="f-version">Mã phiên bản cũ — external version ID</label>
+                <input id="f-version" type="text" placeholder="Ví dụ: 874149063" autocomplete="off" spellcheck="false" />
+                <div class="sub">Lấy mã bằng lệnh liệt kê phiên bản của app đã chọn:</div>
+                <div class="codebox"><pre><code id="lv-cmd">ipatool list-versions -b com.example.app</code></pre><button class="copy-btn" id="copy-lv" type="button">Sao chép</button></div>
+              </div>
+              <div class="field">
+                <label for="f-output">Tên file đầu ra (không bắt buộc)</label>
+                <input id="f-output" type="text" placeholder="Để trống = tên mặc định theo Bundle ID" autocomplete="off" spellcheck="false" />
+              </div>
+              <div class="field">
+                <label>Máy tính đang dùng (để tạo file tải)</label>
+                <div class="seg" id="f-os">
+                  <button type="button" data-os="win" aria-pressed="true">Windows (.bat)</button>
+                  <button type="button" data-os="mac" aria-pressed="false">macOS (.sh)</button>
+                  <button type="button" data-os="linux" aria-pressed="false">Linux (.sh)</button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="out-label">Tải IPA về máy tính</div>
+              <button class="btn btn-primary dl-big" id="btn-download-ipa" type="button">⬇ Tải IPA về máy tính</button>
+              <div class="status-msg" id="dl-status">Nút này tải về một file chạy tự động cho app + phiên bản đã chọn. Mở file đó trên máy tính, ipatool sẽ hỏi đăng nhập Apple ID (ngay trên máy của mình) rồi tải file .ipa về cùng thư mục. Cần cài ipatool trước — xem mục 3.</div>
+              <div class="out-label" style="margin-top:14px">Hoặc dán lệnh này vào terminal</div>
+              <div class="codebox"><pre><code id="out-download">ipatool download -b com.example.app</code></pre><button class="copy-btn" id="copy-download" type="button">Sao chép</button></div>
+              <div class="out-label" style="margin-top:14px">Bộ lệnh đầy đủ từ đầu (đăng nhập → lấy giấy phép → tải)</div>
+              <div class="codebox"><pre><code id="out-full">ipatool auth login
+ipatool download -b com.example.app</code></pre><button class="copy-btn" id="copy-full" type="button">Sao chép</button></div>
+              <ol class="flow-list">
+                <li>Tìm app ở trên (theo tên hoặc Bundle ID) và bấm chọn.</li>
+                <li>Chọn phiên bản: bản mới nhất, hoặc bản cũ bằng mã external version ID.</li>
+                <li>Bấm “Tải IPA về máy tính” rồi mở file vừa tải — hoặc sao chép bộ lệnh vào terminal.</li>
+                <li>Đăng nhập Apple ID khi ipatool hỏi; file .ipa/.pkg tải xong nằm ngay trong thư mục đó.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ĐÃ MUA -->
+      <section id="da-mua">
+        <div class="sec-head">
+          <h2>2 · Đã mua — tải lại app đã mua về dạng .ipa</h2>
+          <p>Sau khi đăng nhập tài khoản bằng ipatool trên máy tính, toàn bộ app tài khoản đã mua/tải sẽ nằm trong mục đã mua. Nạp danh sách đó vào trang này để xem, lọc và tải từng app về dạng .ipa — kể cả app đã bị gỡ khỏi App Store nhưng còn trong lịch sử mua.</p>
+        </div>
+        <div class="steps cols-3" style="margin-bottom:14px">
+          <div class="step"><div class="num">1</div><h3>Đăng nhập trên máy của mình</h3><p>Mở terminal trên máy tính và chạy lệnh dưới đây. Mật khẩu + mã 2FA chỉ nhập trong cửa sổ này — <b>tuyệt đối không nhập Apple ID vào bất kỳ trang web nào</b>.</p><div class="codebox"><pre><code>ipatool auth login</code></pre><button class="copy-btn" data-copy="ipatool auth login" type="button">Sao chép</button></div></div>
+          <div class="step"><div class="num">2</div><h3>Xuất danh sách đã mua</h3><p>Chạy lệnh liệt kê app đã mua, sao chép toàn bộ kết quả (hoặc lưu ra file) để nạp vào trang ở bước 3:</p><div class="codebox"><pre><code>ipatool list-purchases</code></pre><button class="copy-btn" data-copy="ipatool list-purchases" type="button">Sao chép</button></div></div>
+          <div class="step"><div class="num">3</div><h3>Nạp vào mục Đã mua</h3><p>Dán kết quả vào ô dưới hoặc chọn file đã lưu. Trang tự nhận diện Bundle ID, tra thêm icon / phiên bản từ App Store và hiện nút tải .ipa cho từng app. Danh sách chỉ nằm trong bộ nhớ của tab này, không gửi đi đâu.</p></div>
+        </div>
+        <div class="card">
+          <div class="field">
+            <label for="p-import">Danh sách đã mua — dán kết quả lệnh list-purchases vào đây</label>
+            <textarea class="ta" id="p-import" placeholder="Dán kết quả của ipatool list-purchases (bảng chữ, JSON, hoặc mỗi dòng một Bundle ID đều nhận)…" spellcheck="false"></textarea>
+          </div>
+          <div class="import-actions">
+            <button class="btn btn-primary btn-small" id="p-load" type="button">Nạp danh sách đã mua</button>
+            <input type="file" id="p-file" accept=".json,.txt,.csv" aria-label="Chọn file danh sách đã mua" />
+            <button class="btn btn-ghost btn-small" id="p-clear" type="button">Xoá danh sách</button>
+          </div>
+          <div class="import-actions" style="margin-top:16px">
+            <input id="p-add-bundle" type="text" placeholder="Thêm tay một Bundle ID đã mua, ví dụ: com.google.ios.youtube" autocomplete="off" spellcheck="false" style="flex:1 1 240px;min-height:48px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-family:inherit;font-size:14.5px" />
+            <button class="btn btn-ghost btn-small" id="p-add" type="button">Thêm vào Đã mua</button>
+          </div>
+          <div class="search-row" style="margin-top:16px">
+            <input id="p-filter" type="text" placeholder="Lọc trong mục Đã mua theo tên app hoặc Bundle ID…" autocomplete="off" spellcheck="false" aria-label="Lọc app đã mua" />
+          </div>
+          <div class="status-msg" id="p-status" role="status"><span id="p-count">0 app đã mua</span> — nạp danh sách ở trên để bắt đầu.</div>
+          <div class="results-grid" id="p-grid"></div>
+          <div class="empty-box" id="p-empty">Mục Đã mua đang trống. Đăng nhập bằng ipatool trên máy tính (bước 1), xuất danh sách đã mua (bước 2) rồi nạp vào đây — hoặc thêm tay từng Bundle ID đã mua.</div>
+        </div>
+      </section>
+
+      <!-- CÀI ĐẶT -->
+      <section id="cai-dat">
+        <div class="sec-head">
+          <h2>3 · Cài đặt ipatool theo hệ điều hành</h2>
+          <p>Chọn hệ điều hành đang dùng trên máy tính. Windows và Linux tải bản dựng sẵn từ trang Releases; macOS cài nhanh bằng Homebrew.</p>
+        </div>
+        <div class="card">
+          <div class="tabs" role="tablist" aria-label="Chọn hệ điều hành">
+            <button class="tab-btn" role="tab" aria-selected="true" data-tab="win">Windows</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="mac">macOS</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="linux">Linux</button>
+          </div>
+
+          <div class="tab-panel active" id="panel-win" role="tabpanel">
+            <h3>Windows — tải bản dựng sẵn</h3>
+            <p>Mở trang Releases, tải file dành cho Windows (kiến trúc amd64), giải nén rồi mở PowerShell hoặc Windows Terminal ngay trong thư mục vừa giải nén.</p>
+            <div class="codebox"><pre><code>.\ipatool.exe --help</code></pre><button class="copy-btn" data-copy=".\ipatool.exe --help" type="button">Sao chép</button></div>
+            <p class="hint">Mẹo: giữ phím Shift + chuột phải trong thư mục → “Open PowerShell window here” để mở terminal đúng chỗ, khỏi phải gõ đường dẫn dài.</p>
+            <p><a href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener"><b>→ Mở trang Releases để tải</b></a></p>
+          </div>
+
+          <div class="tab-panel" id="panel-mac" role="tabpanel">
+            <h3>macOS — cài bằng Homebrew</h3>
+            <p>Một lệnh duy nhất, Homebrew tự tải và đặt ipatool vào PATH:</p>
+            <div class="codebox"><pre><code>brew install ipatool</code></pre><button class="copy-btn" data-copy="brew install ipatool" type="button">Sao chép</button></div>
+            <p class="hint">Chưa có Homebrew? Cài trước tại <a href="https://brew.sh" target="_blank" rel="noopener">brew.sh</a>. Cập nhật về sau bằng <code>brew upgrade ipatool</code>.</p>
+          </div>
+
+          <div class="tab-panel" id="panel-linux" role="tabpanel">
+            <h3>Linux — tải bản dựng sẵn</h3>
+            <p>Tải file Linux tương ứng (amd64 hoặc arm64) từ trang Releases, giải nén, cấp quyền chạy rồi dùng trực tiếp:</p>
+            <div class="codebox"><pre><code>chmod +x ipatool
+./ipatool --help</code></pre><button class="copy-btn" data-copy="chmod +x ipatool&#10;./ipatool --help" type="button">Sao chép</button></div>
+            <p><a href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener"><b>→ Mở trang Releases để tải</b></a></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUY TRÌNH 4 BƯỚC -->
+      <section id="quy-trinh">
+        <div class="sec-head">
+          <h2>4 · Quy trình 4 bước</h2>
+          <p>Làm đúng thứ tự này là tải được. Đăng nhập chỉ cần làm một lần, các lần sau ipatool dùng lại phiên đã lưu.</p>
+        </div>
+        <div class="steps">
+          <div class="step"><div class="num">1</div><h3>Đăng nhập Apple ID</h3><p>Chạy <code>ipatool auth login</code>, nhập mật khẩu và mã 2FA ngay trong terminal trên máy của mình. Cần tài khoản đã từng dùng App Store.</p></div>
+          <div class="step"><div class="num">2</div><h3>Tìm ứng dụng / mở Đã mua</h3><p>Tìm ngay trên trang này theo tên app hoặc Bundle ID, hoặc mở mục <b>Đã mua</b> để tải lại app tài khoản đã sở hữu.</p></div>
+          <div class="step"><div class="num">3</div><h3>Lấy giấy phép (app miễn phí)</h3><p>Nếu app chưa thuộc tài khoản, chạy <code>ipatool purchase -b …</code> trước để “mua” miễn phí. App đã mua rồi thì bỏ qua bước này.</p></div>
+          <div class="step"><div class="num">4</div><h3>Tải về máy</h3><p>Bấm nút tải IPA trên trang hoặc chạy <code>ipatool download -b …</code>. File .ipa/.pkg được lưu vào thư mục hiện tại trên máy tính.</p></div>
+        </div>
+      </section>
+
+      <!-- BẢNG LỆNH -->
+      <section id="lenh">
+        <div class="sec-head">
+          <h2>5 · Các lệnh thường dùng</h2>
+          <p>Toàn bộ lệnh chính của ipatool theo tài liệu gốc. Gõ <code>ipatool [lệnh] --help</code> để xem thêm tùy chọn của từng lệnh.</p>
+        </div>
+        <div class="cmd-grid">
+          <div class="cmd-card"><h3><code>auth login</code><span class="pill">Bắt đầu</span></h3><p>Đăng nhập App Store bằng Apple ID, hỗ trợ xác thực 2 bước và đăng nhập bằng số điện thoại (một số khu vực).</p><div class="ex">ipatool auth login --email ban@icloud.com</div></div>
+          <div class="cmd-card"><h3><code>search</code></h3><p>Tìm app trên App Store theo từ khóa, kết quả hiển thị Bundle ID và nền tảng hỗ trợ.</p><div class="ex">ipatool search "CapCut" --limit 10</div></div>
+          <div class="cmd-card"><h3><code>download</code><span class="pill">Lệnh chính</span></h3><p>Tải gói .ipa hoặc .pkg về máy theo Bundle ID hoặc App Store ID, hỗ trợ tải song song và tải tiếp khi bị ngắt.</p><div class="ex">ipatool download -b com.zhiliaoapp.musically -o tiktok.ipa</div></div>
+          <div class="cmd-card"><h3><code>list-purchases</code><span class="pill">Đã mua</span></h3><p>Liệt kê các app tài khoản đang sở hữu, lọc được theo nền tảng — dùng để nạp vào mục Đã mua trên trang này, tiện cả khi app đã bị gỡ khỏi App Store.</p><div class="ex">ipatool list-purchases --platform macos</div></div>
+          <div class="cmd-card"><h3><code>list-versions</code></h3><p>Xem danh sách phiên bản đã phát hành của một app kèm mã external version ID để tải bản cũ.</p><div class="ex">ipatool list-versions -b com.google.ios.youtube</div></div>
+          <div class="cmd-card"><h3><code>purchase</code></h3><p>Lấy giấy phép cho app miễn phí chưa thuộc tài khoản, để sau đó tải được bằng lệnh download.</p><div class="ex">ipatool purchase -b com.example.app</div></div>
+          <div class="cmd-card"><h3><code>get-version-metadata</code></h3><p>Xem thông tin chi tiết của một phiên bản cụ thể: số bản dựng, ngày phát hành, dung lượng…</p><div class="ex">ipatool get-version-metadata -b com.example.app</div></div>
+          <div class="cmd-card"><h3><code>mcp</code><span class="pill">Cho AI</span></h3><p>Mở máy chủ MCP qua stdio để các trợ lý AI dùng được các thao tác search, download, list-versions… của ipatool.</p><div class="ex">ipatool mcp</div></div>
+        </div>
+      </section>
+
+      <!-- LƯU Ý FAIRPLAY -->
+      <section id="luu-y">
+        <div class="warn">
+          <h2>⚠ Đọc kỹ trước khi tải: giới hạn FairPlay</h2>
+          <div class="warn-grid">
+            <div>
+              <h3>File tải về vẫn còn mã hóa</h3>
+              <ul>
+                <li>IPA tải bằng ipatool là <b>file gốc từ App Store</b>, vẫn mang lớp mã hóa <b>FairPlay</b> và gắn với <b>đúng Apple ID đã mua/tải app đó</b>.</li>
+                <li>Ký lại bằng chứng chỉ khác (SideStore, công cụ ký IPA…) <b>không gỡ được lớp mã hóa này</b> — file không dùng để cài mod hay chèn tweak như IPA đã giải mã (decrypted).</li>
+                <li>Chỉ tải được app mà tài khoản <b>đã sở hữu</b> hoặc app miễn phí đã lấy giấy phép bằng lệnh purchase.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>ipatool hợp nhất cho việc gì?</h3>
+              <ul>
+                <li><b>Lưu trữ, sao lưu</b> bộ sưu tập app đã mua về ổ cứng máy tính.</li>
+                <li><b>Tải lại phiên bản cũ</b> khi bản mới lỗi hoặc bị gỡ tính năng.</li>
+                <li>Tải lại app <b>đã bị gỡ khỏi App Store</b> nhưng còn trong lịch sử mua.</li>
+                <li>Lấy file gốc để <b>soi thông tin phiên bản</b>, nghiên cứu, hoặc tải app macOS dạng .pkg.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TẢI XUỐNG -->
+      <section id="tai-xuong">
+        <div class="sec-head">
+          <h2>6 · Tải ipatool về máy tính</h2>
+          <p>Mọi bản dựng chính thức đều nằm ở trang Releases của repo gốc. Bản mới nhất hiện tại là <b>v2.8.1</b> — bổ sung tải song song, tự nhận diện storefront theo khu vực và cải thiện khôi phục app đã bị gỡ.</p>
+        </div>
+        <div class="dl-grid">
+          <div class="dl-card"><h3>Windows</h3><p>Tải file Windows amd64 trong mục Assets của bản phát hành, giải nén và chạy ipatool.exe từ PowerShell.</p><a href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener">Tải cho Windows →</a></div>
+          <div class="dl-card"><h3>macOS</h3><p>Cách nhanh nhất là Homebrew: <code>brew install ipatool</code>. Cũng có bản dựng sẵn trong Releases nếu không dùng Homebrew.</p><a href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener">Tải cho macOS →</a></div>
+          <div class="dl-card"><h3>Linux</h3><p>Tải file Linux amd64/arm64 trong mục Assets, cấp quyền chạy bằng chmod +x rồi dùng trong terminal.</p><a href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener">Tải cho Linux →</a></div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq">
+        <div class="sec-head"><h2>Câu hỏi thường gặp</h2></div>
+        <details>
+          <summary>Tìm app ngay trên trang này hoạt động thế nào?</summary>
+          <p>Ô tìm kiếm ở mục 1 tra dữ liệu App Store công khai của Apple (tên app, Bundle ID, phiên bản hiện tại, dung lượng, giá) và hiển thị ngay trên trình duyệt. Chọn một app, trang tự điền Bundle ID và phiên bản mới nhất vào phần tải; muốn bản cũ thì chuyển chế độ phiên bản sang “Bản cũ” và nhập mã external version ID.</p>
+        </details>
+        <details>
+          <summary>Mục Đã mua hoạt động thế nào? Có phải đăng nhập Apple ID trên trang này không?</summary>
+          <p><b>Không — trang này không có ô đăng nhập và không bao giờ hỏi mật khẩu Apple ID.</b> Đăng nhập diễn ra bằng <code>ipatool auth login</code> trong terminal trên máy tính của mình. Sau đó chạy <code>ipatool list-purchases</code> để lấy danh sách app đã mua, dán kết quả (hoặc tải file) vào mục Đã mua: trang nhận diện các Bundle ID, tra thêm icon và phiên bản từ App Store, rồi tạo nút tải .ipa cho từng app. Danh sách chỉ nằm trong bộ nhớ của tab đang mở, đóng tab là mất, không được gửi hay lưu ở đâu.</p>
+        </details>
+        <details>
+          <summary>Có cần iPhone hoặc iTunes để tải IPA không?</summary>
+          <p>Không. ipatool chạy hoàn toàn trên máy tính (Windows, macOS, Linux) và nói chuyện trực tiếp với App Store. Điều kiện duy nhất là một Apple ID đã được cấu hình dùng App Store.</p>
+        </details>
+        <details>
+          <summary>Tải app trả phí được không?</summary>
+          <p>Chỉ khi Apple ID đăng nhập <b>đã mua app đó trước đây</b> — các app này nằm trong mục Đã mua. ipatool không bỏ qua được khâu thanh toán — với app miễn phí chưa sở hữu, chạy <code>ipatool purchase -b …</code> để lấy giấy phép trước rồi mới tải.</p>
+        </details>
+        <details>
+          <summary>Muốn tải phiên bản cũ của app thì làm thế nào?</summary>
+          <p>Chạy <code>ipatool list-versions -b [bundle-id]</code> để xem các phiên bản và mã external version ID, sau đó tải bằng <code>ipatool download -b [bundle-id] --external-version-id [mã]</code>. Ở mục 1 trên trang này, chọn chế độ phiên bản “Bản cũ” là trang tự ghép sẵn mã vào lệnh tải và file tải tự động.</p>
+        </details>
+        <details>
+          <summary>File IPA tải về cài qua SideStore / ký lại để dùng được không?</summary>
+          <p>Không đúng mục đích. File vẫn còn mã hóa FairPlay gắn với Apple ID đã tải, ký lại không loại bỏ được mã hóa. Muốn cài app ngoài App Store cần IPA đã giải mã từ nguồn khác; ipatool phù hợp cho lưu trữ và tải lại bản cũ.</p>
+        </details>
+        <details>
+          <summary>Tải app macOS thì khác gì?</summary>
+          <p>Thêm cờ <code>--platform macos</code> khi search/download; file nhận được là gói <code>.pkg</code> thay vì .ipa. Ô chọn nền tảng trong mục 1 đã có sẵn tùy chọn này.</p>
+        </details>
+        <details>
+          <summary>Đăng nhập Apple ID bằng ipatool có an toàn không?</summary>
+          <p><b>Nguyên tắc quan trọng nhất: không bao giờ nhập Apple ID / mật khẩu vào bất kỳ trang web nào</b> — kể cả trang này (trang này không có ô đăng nhập). Mật khẩu và mã 2FA chỉ được nhập trong cửa sổ terminal của ipatool chạy trên chính máy tính của mình, và ipatool gửi thông tin đó tới máy chủ của Apple để xác thực, giống cách iTunes/App Store đăng nhập.</p>
+          <p>Để giảm rủi ro: chỉ tải ipatool từ trang Releases chính thức của repo <code>majd/ipatool</code> (đừng tải từ nguồn lạ); phiên đăng nhập được ipatool lưu trong kho khóa của hệ điều hành trên máy, có thể thu hồi phiên đăng nhập bằng <code>ipatool auth revoke</code>. Lưu ý ipatool là công cụ bên thứ ba, không phải phần mềm chính thức của Apple — việc đăng nhập qua công cụ không chính thức luôn có rủi ro nhất định (Apple có thể yêu cầu xác minh lại hoặc tạm khóa tài khoản nếu phát hiện bất thường), nên cân nhắc dùng Apple ID phụ cho việc tải lưu trữ.</p>
+        </details>
+        <details>
+          <summary>Đăng nhập báo lỗi hoặc hết phiên thì sao?</summary>
+          <p>Chạy lại <code>ipatool auth login</code> để làm mới phiên. Các bản ipatool gần đây hiển thị nguyên văn hộp thoại lỗi của Apple kèm liên kết xử lý (ví dụ yêu cầu xác minh tài khoản), cứ làm theo hướng dẫn đó rồi đăng nhập lại.</p>
+        </details>
+      </section>
+
+      <footer>
+        <p><b>Nguồn:</b> <a href="https://github.com/majd/ipatool" target="_blank" rel="noopener">github.com/majd/ipatool</a> — dự án mã nguồn mở của majd, giấy phép MIT, viết bằng Go. Số liệu (sao, số bản phát hành, bản mới nhất v2.8.1) lấy từ repo tại thời điểm dựng trang, 23/11/2026.</p>
+        <p>Tìm kiếm trên trang dùng dữ liệu App Store công khai của Apple và chạy ngay trong trình duyệt; danh sách Đã mua do người dùng tự nạp từ ipatool trên máy của họ và chỉ nằm trong tab đang mở. Việc tải app diễn ra bằng ipatool trên máy tính của người dùng, với Apple ID của chính họ.</p>
+      </footer>
+    </div>
+
+    <script>
+      // ---------- Helpers ----------
+      function $(id){ return document.getElementById(id); }
+      function escHtml(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+      function clean(s){ return String(s || '').replace(/["\r\n]/g,'').trim(); }
+      function fmtBytes(b){ b = Number(b); if(!b || isNaN(b)) return ''; var u=['B','KB','MB','GB'], i=0; while(b>=1024 && i<u.length-1){ b/=1024; i++; } return (i===0 ? b : b.toFixed(1)) + ' ' + u[i]; }
+      function fmtDate(d){ if(!d) return ''; var t=new Date(d); if(isNaN(t.getTime())) return ''; return t.toLocaleDateString('vi-VN'); }
+      function saveBlob(name, text){
+        var blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url; a.download = name;
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 400);
+      }
+
+      // ---------- Copy ----------
+      function doCopy(text, btn){
+        function done(){
+          if(!btn) return;
+          var old = btn.textContent;
+          btn.textContent = 'Đã chép ✓';
+          btn.classList.add('done');
+          setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 1600);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(); });
+        } else { fallback(); }
+        function fallback(){
+          var ta = document.createElement('textarea');
+          ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+          document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); } catch(e){}
+          document.body.removeChild(ta); done();
+        }
+      }
+      document.querySelectorAll('.copy-btn[data-copy]').forEach(function(btn){
+        btn.addEventListener('click', function(){ doCopy(btn.getAttribute('data-copy'), btn); });
+      });
+
+      // ---------- OS install tabs ----------
+      var tabBtns = document.querySelectorAll('.tab-btn');
+      tabBtns.forEach(function(btn){
+        btn.addEventListener('click', function(){
+          tabBtns.forEach(function(b){ b.setAttribute('aria-selected','false'); });
+          btn.setAttribute('aria-selected','true');
+          document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+          document.getElementById('panel-' + btn.getAttribute('data-tab')).classList.add('active');
+        });
+      });
+
+      // ---------- State ----------
+      var state = {
+        mode: 'name',
+        selected: null,      // normalized app object or null
+        platform: '',
+        scriptOS: 'win',
+        results: [],
+        purchased: []        // [{bundleId, app}]
+      };
+      // Đoán hệ điều hành để chọn sẵn định dạng file tải
+      (function(){
+        var ua = (navigator.userAgent || '') + ' ' + (navigator.platform || '');
+        if (/Mac/i.test(ua)) state.scriptOS = 'mac';
+        else if (/Linux/i.test(ua) && !/Android/i.test(ua)) state.scriptOS = 'linux';
+        document.querySelectorAll('#f-os button').forEach(function(b){
+          b.setAttribute('aria-pressed', b.getAttribute('data-os') === state.scriptOS ? 'true' : 'false');
+        });
+      })();
+
+      // ---------- iTunes Search API (fetch, dự phòng JSONP) ----------
+      var jsonpSeq = 0;
+      function itunes(url){
+        return fetch(url).then(function(r){
+          if(!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        }).catch(function(){
+          return new Promise(function(resolve, reject){
+            var cb = '__itunesCb' + (++jsonpSeq);
+            var s = document.createElement('script');
+            var timer = setTimeout(function(){ cleanup(); reject(new Error('timeout')); }, 12000);
+            function cleanup(){ clearTimeout(timer); try{ delete window[cb]; }catch(e){ window[cb]=undefined; } if(s.parentNode) s.parentNode.removeChild(s); }
+            window[cb] = function(data){ cleanup(); resolve(data); };
+            s.onerror = function(){ cleanup(); reject(new Error('network')); };
+            s.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + cb;
+            document.head.appendChild(s);
+          });
+        });
+      }
+      function normalizeApp(r){
+        if(!r) return null;
+        var icon = r.artworkUrl100 || r.artworkUrl60 || '';
+        icon = icon.replace('100x100bb', '512x512bb').replace('60x60bb', '512x512bb');
+        return {
+          name: r.trackName || r.collectionName || r.bundleId || '',
+          bundleId: r.bundleId || '',
+          version: r.version || '',
+          icon: icon,
+          dev: r.sellerName || r.artistName || '',
+          price: r.formattedPrice || (r.price === 0 ? 'Miễn phí' : ''),
+          size: r.fileSizeBytes ? fmtBytes(r.fileSizeBytes) : '',
+          rating: r.averageUserRating ? (Math.round(r.averageUserRating * 10) / 10) : '',
+          ratingCount: r.userRatingCount || 0,
+          genre: r.primaryGenreName || '',
+          date: r.currentVersionReleaseDate || '',
+          notes: r.releaseNotes || '',
+          desc: r.description || '',
+          url: r.trackViewUrl || '',
+          minOs: r.minimumOsVersion || ''
+        };
+      }
+
+      // ---------- Search ----------
+      var qInput = $('q-input'), qStatus = $('q-status');
+      document.querySelectorAll('.mode-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          document.querySelectorAll('.mode-btn').forEach(function(b){ b.setAttribute('aria-selected','false'); });
+          btn.setAttribute('aria-selected','true');
+          state.mode = btn.getAttribute('data-mode');
+          qInput.placeholder = state.mode === 'bundle'
+            ? 'Dán Bundle ID, ví dụ: com.google.ios.youtube'
+            : 'Ví dụ: YouTube, CapCut, TikTok…';
+          qInput.focus();
+        });
+      });
+      document.querySelectorAll('.chips button').forEach(function(b){
+        b.addEventListener('click', function(){
+          document.querySelectorAll('.mode-btn').forEach(function(x){ x.setAttribute('aria-selected', x.getAttribute('data-mode') === 'name' ? 'true' : 'false'); });
+          state.mode = 'name';
+          qInput.value = b.getAttribute('data-q');
+          doSearch();
+        });
+      });
+      $('q-btn').addEventListener('click', doSearch);
+      qInput.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); doSearch(); } });
+
+      function doSearch(){
+        var q = clean(qInput.value);
+        var country = $('q-country').value;
+        var entity = $('q-entity').value;
+        if(!q){
+          qStatus.textContent = state.mode === 'bundle' ? 'Hãy dán Bundle ID cần tra rồi bấm Tìm kiếm.' : 'Hãy nhập tên app rồi bấm Tìm kiếm.';
+          qStatus.className = 'status-msg err';
+          return;
+        }
+        qStatus.textContent = 'Đang tìm trên App Store…';
+        qStatus.className = 'status-msg';
+        var url;
+        if(state.mode === 'bundle'){
+          url = 'https://itunes.apple.com/lookup?bundleId=' + encodeURIComponent(q) + '&country=' + country;
+        } else {
+          url = 'https://itunes.apple.com/search?term=' + encodeURIComponent(q) + '&entity=' + entity + '&limit=24&country=' + country;
+        }
+        itunes(url).then(function(data){
+          var list = (data && data.results ? data.results : []).filter(function(r){ return r && r.bundleId; }).map(normalizeApp);
+          state.results = list;
+          renderResults();
+          if(list.length){
+            qStatus.textContent = 'Tìm thấy ' + list.length + ' app. Bấm vào app cần tải để chọn.';
+            qStatus.className = 'status-msg ok';
+          } else {
+            qStatus.textContent = 'Không tìm thấy app nào khớp. Thử từ khóa khác, đổi khu vực App Store, hoặc điền tay Bundle ID ở phần dưới.';
+            qStatus.className = 'status-msg err';
+          }
+        }).catch(function(){
+          state.results = [];
+          renderResults();
+          qStatus.textContent = 'Không kết nối được tới App Store lúc này. Vẫn có thể điền tay Bundle ID ở phần dưới để tạo lệnh / file tải.';
+          qStatus.className = 'status-msg err';
+        });
+      }
+      function appCardHtml(app, selected){
+        var meta = [];
+        if(app.version) meta.push('v' + escHtml(app.version));
+        if(app.size) meta.push(escHtml(app.size));
+        if(app.price) meta.push(escHtml(app.price));
+        if(app.rating) meta.push('★ ' + app.rating + (app.ratingCount ? ' (' + app.ratingCount.toLocaleString('vi-VN') + ')' : ''));
+        if(app.genre) meta.push(escHtml(app.genre));
+        return '<img src="' + escHtml(app.icon || '') + '" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'" />' +
+          '<div class="ai"><h4>' + escHtml(app.name) + '</h4>' +
+          '<div class="dev">' + escHtml(app.dev) + '</div>' +
+          '<div class="bid">' + escHtml(app.bundleId) + '</div>' +
+          '<div class="meta">' + meta.map(function(m){ return '<span>' + m + '</span>'; }).join('') + '</div></div>';
+      }
+      function renderResults(){
+        var grid = $('results-grid');
+        grid.innerHTML = '';
+        $('results-empty').style.display = state.results.length ? 'none' : 'block';
+        state.results.forEach(function(app){
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'app-card' + (state.selected && state.selected.bundleId === app.bundleId ? ' selected' : '');
+          b.innerHTML = appCardHtml(app, false);
+          b.addEventListener('click', function(){ selectApp(app, true); });
+          grid.appendChild(b);
+        });
+      }
+      function selectApp(app, scroll){
+        state.selected = app;
+        if(app){
+          $('f-bundle').value = app.bundleId;
+          if(app.url && app.name && app.name.toLowerCase().indexOf('mac') >= 0){}
+        }
+        renderSelected();
+        renderResults();
+        renderOutputs();
+        if(scroll){
+          $('sel-detail').scrollIntoView({behavior:'smooth', block:'nearest'});
+        }
+      }
+      function renderSelected(){
+        var app = state.selected;
+        if(!app){
+          $('sel-placeholder').style.display = 'block';
+          $('sel-detail').style.display = 'none';
+          $('v-latest-info').textContent = 'Chưa chọn app nên chưa rõ số phiên bản mới nhất.';
+          return;
+        }
+        $('sel-placeholder').style.display = 'none';
+        $('sel-detail').style.display = 'block';
+        $('sel-icon').src = app.icon || '';
+        $('sel-icon').style.visibility = app.icon ? 'visible' : 'hidden';
+        $('sel-name').textContent = app.name || app.bundleId;
+        $('sel-dev').textContent = app.dev || '';
+        $('sel-bid').textContent = app.bundleId;
+        var meta = [];
+        if(app.version) meta.push('Bản mới nhất: v' + app.version);
+        if(app.date) meta.push('Phát hành ' + fmtDate(app.date));
+        if(app.size) meta.push(app.size);
+        if(app.price) meta.push(app.price);
+        if(app.minOs) meta.push('iOS ' + app.minOs + '+');
+        $('sel-meta').innerHTML = meta.map(function(m){ return '<span>' + escHtml(m) + '</span>'; }).join('') +
+          (app.url ? ' <a href="' + escHtml(app.url) + '" target="_blank" rel="noopener" style="font-size:12.5px;font-weight:700">Xem trên App Store ↗</a>' : '');
+        var d = app.notes || app.desc || '';
+        $('sel-desc').textContent = d.length > 320 ? d.slice(0, 320) + '…' : d;
+        $('v-latest-info').textContent = app.version
+          ? 'Bản mới nhất hiện tại: v' + app.version + (app.date ? ' · phát hành ' + fmtDate(app.date) : '') + (app.size ? ' · ' + app.size : '')
+          : 'App này không còn hiện trên App Store (có thể đã bị gỡ) — vẫn tải được nếu tài khoản đã mua, trang sẽ dùng lệnh tải theo Bundle ID.';
+      }
+
+      // ---------- Download command / script ----------
+      var platformSeg = document.querySelectorAll('#f-platform button');
+      platformSeg.forEach(function(b){
+        b.addEventListener('click', function(){
+          platformSeg.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+          b.setAttribute('aria-pressed','true');
+          state.platform = b.getAttribute('data-p');
+          renderOutputs();
+        });
+      });
+      var osSeg = document.querySelectorAll('#f-os button');
+      osSeg.forEach(function(b){
+        b.addEventListener('click', function(){
+          osSeg.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+          b.setAttribute('aria-pressed','true');
+          state.scriptOS = b.getAttribute('data-os');
+        });
+      });
+      $('v-mode').addEventListener('change', function(){
+        $('v-old-wrap').style.display = this.value === 'old' ? 'block' : 'none';
+        renderOutputs();
+      });
+      function currentBundle(){
+        return clean($('f-bundle').value) || (state.selected ? state.selected.bundleId : '') || 'com.example.app';
+      }
+      function buildDownloadCmd(bundle){
+        var cmd = 'ipatool download -b ' + bundle;
+        if(state.platform) cmd += ' --platform ' + state.platform;
+        var out = clean($('f-output').value);
+        if(out) cmd += ' -o ' + out;
+        if($('v-mode').value === 'old'){
+          var ver = clean($('f-version').value);
+          if(ver) cmd += ' --external-version-id ' + ver;
+        }
+        return cmd;
+      }
+      function renderOutputs(){
+        var b = currentBundle();
+        var dl = buildDownloadCmd(b);
+        $('out-download').textContent = dl;
+        $('out-full').textContent = 'ipatool auth login\nipatool purchase -b ' + b + '\n' + dl;
+        $('lv-cmd').textContent = 'ipatool list-versions -b ' + b;
+      }
+      ['f-bundle','f-output','f-version'].forEach(function(id){
+        $(id).addEventListener('input', function(){
+          if(id === 'f-bundle' && state.selected && clean($('f-bundle').value) !== state.selected.bundleId){
+            // Người dùng sửa tay Bundle ID khác app đã chọn
+            state.selected = null;
+            renderSelected();
+            renderResults();
+          }
+          renderOutputs();
+        });
+      });
+      $('copy-download').addEventListener('click', function(){ doCopy($('out-download').textContent, this); });
+      $('copy-full').addEventListener('click', function(){ doCopy($('out-full').textContent, this); });
+      $('copy-lv').addEventListener('click', function(){ doCopy($('lv-cmd').textContent, this); });
+
+      function scriptFor(bundle){
+        var dl = buildDownloadCmd(bundle);
+        var name = state.selected && state.selected.bundleId === bundle ? state.selected.name : bundle;
+        if(state.scriptOS === 'win'){
+          return { filename: 'tai-ipa-' + bundle.replace(/[^a-zA-Z0-9]+/g, '-') + '.bat', text:
+            '@echo off\r\n' +
+            'chcp 65001 >nul\r\n' +
+            'title Tai IPA - ' + name.replace(/["\r\n]/g, '') + '\r\n' +
+            'echo ============================================\r\n' +
+            'echo  Tai IPA: ' + bundle + '\r\n' +
+            'echo  Neu chua dang nhap Apple ID, ipatool se bao loi.\r\n' +
+            'echo  Hay chay lenh: ipatool auth login  roi mo lai file nay.\r\n' +
+            'echo ============================================\r\n' +
+            'where ipatool >nul 2>nul\r\n' +
+            'if errorlevel 1 (\r\n' +
+            '  echo Khong thay ipatool. Tai ban chinh thuc tai: https://github.com/majd/ipatool/releases\r\n' +
+            '  pause\r\n  exit /b 1\r\n)\r\n' +
+            'ipatool purchase -b ' + bundle + ' >nul 2>nul\r\n' +
+            dl + '\r\n' +
+            'if errorlevel 1 (\r\n' +
+            '  echo Tai chua xong. Kiem tra dang nhap bang lenh: ipatool auth login\r\n' +
+            ') else (\r\n' +
+            '  echo Xong! File .ipa/.pkg nam trong thu muc nay.\r\n' +
+            ')\r\npause\r\n' };
+        }
+        return { filename: 'tai-ipa-' + bundle.replace(/[^a-zA-Z0-9]+/g, '-') + '.sh', text:
+          '#!/bin/bash\n' +
+          '# Tai IPA: ' + bundle + (name !== bundle ? ' (' + name.replace(/[\r\n]/g, '') + ')' : '') + '\n' +
+          'cd "$(dirname "$0")"\n' +
+          'if ! command -v ipatool >/dev/null 2>&1; then\n' +
+          '  echo "Khong thay ipatool. Cai dat: brew install ipatool (macOS) hoac tai tai https://github.com/majd/ipatool/releases"\n' +
+          '  exit 1\nfi\n' +
+          'echo "Neu chua dang nhap Apple ID, hay chay: ipatool auth login roi mo lai file nay."\n' +
+          'ipatool purchase -b ' + bundle + ' >/dev/null 2>&1 || true\n' +
+          'if ' + dl + '; then\n' +
+          '  echo "Xong! File .ipa/.pkg nam trong thu muc nay."\n' +
+          'else\n' +
+          '  echo "Tai chua xong. Kiem tra dang nhap bang lenh: ipatool auth login"\nfi\n' };
+      }
+      $('btn-download-ipa').addEventListener('click', function(){
+        var bundle = currentBundle();
+        if(bundle === 'com.example.app'){
+          $('dl-status').textContent = 'Hãy chọn một app từ kết quả tìm kiếm, hoặc điền Bundle ID thật vào ô Bundle ID trước khi tải.';
+          $('dl-status').className = 'status-msg err';
+          $('f-bundle').focus();
+          return;
+        }
+        var s = scriptFor(bundle);
+        saveBlob(s.filename, s.text);
+        $('dl-status').textContent = 'Đã tải file ' + s.filename + ' — mở file này trên máy tính để ipatool tải ' + bundle + ' về dạng .ipa/.pkg. Nếu máy hỏi đăng nhập, chỉ nhập Apple ID trong cửa sổ đó.';
+        $('dl-status').className = 'status-msg ok';
+      });
+
+      // ---------- Mục Đã mua ----------
+      function extractBundleIds(text){
+        var ids = [], seen = {};
+        function add(id){
+          id = clean(id);
+          if(id && /^[a-zA-Z0-9][a-zA-Z0-9-]*(\.[a-zA-Z0-9][a-zA-Z0-9-]*){1,6}$/.test(id) && !seen[id]){ seen[id] = 1; ids.push(id); }
+        }
+        var fromJson = false;
+        try {
+          var j = JSON.parse(text);
+          (function walk(o){
+            if(o == null) return;
+            if(Array.isArray(o)){ o.forEach(walk); return; }
+            if(typeof o === 'object'){
+              Object.keys(o).forEach(function(k){
+                if(/bundle/i.test(k) && typeof o[k] === 'string'){ add(o[k]); fromJson = true; }
+                else walk(o[k]);
+              });
+            }
+          })(j);
+        } catch(e){}
+        if(!fromJson){
+          var m = text.match(/[a-zA-Z][a-zA-Z0-9-]*(\.[a-zA-Z0-9][a-zA-Z0-9-]*){1,6}/g) || [];
+          m.forEach(function(tok){
+            if(!/^(www|http|https|github|com\.github)/i.test(tok)) add(tok);
+          });
+        }
+        return ids;
+      }
+      function lookupBundle(bundleId){
+        var country = $('q-country').value;
+        return itunes('https://itunes.apple.com/lookup?bundleId=' + encodeURIComponent(bundleId) + '&country=' + country)
+          .then(function(data){
+            var r = data && data.results && data.results[0];
+            return r ? normalizeApp(r) : null;
+          }).catch(function(){ return null; });
+      }
+      function renderPurchased(){
+        var filter = clean($('p-filter').value).toLowerCase();
+        var grid = $('p-grid');
+        grid.innerHTML = '';
+        var visible = 0;
+        state.purchased.forEach(function(item, idx){
+          var app = item.app;
+          var hay = ((app ? app.name : '') + ' ' + item.bundleId).toLowerCase();
+          if(filter && hay.indexOf(filter) < 0) return;
+          visible++;
+          var card = document.createElement('div');
+          card.className = 'p-card';
+          var meta = [];
+          if(app){
+            if(app.version) meta.push('v' + app.version);
+            if(app.size) meta.push(app.size);
+            if(app.price) meta.push(app.price);
+          }
+          card.innerHTML =
+            '<div class="top">' +
+              (app && app.icon ? '<img src="' + escHtml(app.icon) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'" />' : '') +
+              '<div style="min-width:0"><h4>' + escHtml(app ? (app.name || item.bundleId) : item.bundleId) + '</h4>' +
+              '<div class="bid">' + escHtml(item.bundleId) + '</div>' +
+              '<div class="meta">' + escHtml(meta.join(' · ') || (app ? '' : 'Không còn hiện trên App Store — vẫn tải được vì tài khoản đã mua')) + '</div></div>' +
+            '</div>' +
+            '<div class="p-actions">' +
+              '<button type="button" data-act="dl">⬇ Tải .ipa</button>' +
+              '<button type="button" class="ghost2" data-act="sel">Chọn &amp; chọn phiên bản</button>' +
+              '<button type="button" class="ghost2" data-act="rm">Gỡ khỏi danh sách</button>' +
+            '</div>';
+          card.querySelector('[data-act="dl"]').addEventListener('click', function(){
+            var prev = state.selected;
+            if(app) state.selected = app;
+            var s = scriptFor(item.bundleId);
+            saveBlob(s.filename, s.text);
+            state.selected = prev;
+            $('p-status').innerHTML = '<span id="p-count">' + state.purchased.length + ' app đã mua</span> — đã tải file ' + escHtml(s.filename) + ' cho ' + escHtml(item.bundleId) + '. Mở file trên máy tính để tải .ipa về.';
+            $('p-status').className = 'status-msg ok';
+          });
+          card.querySelector('[data-act="sel"]').addEventListener('click', function(){
+            if(app) selectApp(app, false);
+            else { $('f-bundle').value = item.bundleId; state.selected = null; renderSelected(); renderOutputs(); }
+            document.getElementById('cong-cu').scrollIntoView({behavior:'smooth'});
+          });
+          card.querySelector('[data-act="rm"]').addEventListener('click', function(){
+            state.purchased.splice(idx, 1);
+            renderPurchased();
+          });
+          grid.appendChild(card);
+        });
+        $('p-empty').style.display = state.purchased.length ? 'none' : 'block';
+        if(state.purchased.length && !visible){
+          $('p-empty').style.display = 'block';
+          $('p-empty').textContent = 'Không có app nào khớp với từ khóa lọc.';
+        } else if(state.purchased.length){
+          $('p-empty').style.display = 'none';
+        } else {
+          $('p-empty').textContent = 'Mục Đã mua đang trống. Đăng nhập bằng ipatool trên máy tính (bước 1), xuất danh sách đã mua (bước 2) rồi nạp vào đây — hoặc thêm tay từng Bundle ID đã mua.';
+        }
+        $('p-status').innerHTML = '<span id="p-count">' + state.purchased.length + ' app đã mua</span>' +
+          (state.purchased.length ? ' — bấm “Tải .ipa” ở từng app để tải về máy tính, hoặc “Chọn &amp; chọn phiên bản” để tải bản cũ.' : ' — nạp danh sách ở trên để bắt đầu.');
+        $('p-status').className = 'status-msg';
+      }
+      function addPurchased(ids, doneMsg){
+        var fresh = ids.filter(function(id){
+          return !state.purchased.some(function(p){ return p.bundleId === id; });
+        });
+        if(!fresh.length){
+          $('p-status').textContent = 'Không nhận diện được Bundle ID mới nào. Hãy dán toàn bộ kết quả của ipatool list-purchases, hoặc thêm tay từng Bundle ID.';
+          $('p-status').className = 'status-msg err';
+          return;
+        }
+        fresh.forEach(function(id){ state.purchased.push({bundleId: id, app: null}); });
+        renderPurchased();
+        $('p-status').innerHTML = '<span id="p-count">' + state.purchased.length + ' app đã mua</span> — đang tra icon &amp; phiên bản cho ' + fresh.length + ' app vừa nạp…';
+        var chain = Promise.resolve();
+        fresh.forEach(function(id){
+          chain = chain.then(function(){
+            return lookupBundle(id).then(function(app){
+              state.purchased.forEach(function(p){ if(p.bundleId === id) p.app = app; });
+              renderPurchased();
+            });
+          });
+        });
+        chain.then(function(){
+          $('p-status').innerHTML = '<span id="p-count">' + state.purchased.length + ' app đã mua</span> — ' + escHtml(doneMsg || 'Đã nạp xong danh sách đã mua.');
+          $('p-status').className = 'status-msg ok';
+        });
+      }
+      $('p-load').addEventListener('click', function(){
+        var text = $('p-import').value || '';
+        if(!text.trim()){
+          $('p-status').textContent = 'Ô danh sách đang trống — dán kết quả ipatool list-purchases vào trước, hoặc chọn file.';
+          $('p-status').className = 'status-msg err';
+          return;
+        }
+        addPurchased(extractBundleIds(text));
+      });
+      $('p-file').addEventListener('change', function(){
+        var f = this.files && this.files[0];
+        if(!f) return;
+        var reader = new FileReader();
+        reader.onload = function(){
+          $('p-import').value = String(reader.result || '');
+          addPurchased(extractBundleIds($('p-import').value), 'Đã nạp danh sách từ file ' + f.name + '.');
+        };
+        reader.readAsText(f);
+      });
+      $('p-add').addEventListener('click', function(){
+        var id = clean($('p-add-bundle').value);
+        if(!id){ $('p-add-bundle').focus(); return; }
+        $('p-add-bundle').value = '';
+        addPurchased([id], 'Đã thêm ' + id + ' vào mục Đã mua.');
+      });
+      $('p-add-bundle').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); $('p-add').click(); } });
+      $('p-clear').addEventListener('click', function(){
+        state.purchased = [];
+        $('p-import').value = '';
+        renderPurchased();
+      });
+      $('p-filter').addEventListener('input', renderPurchased);
+
+      renderOutputs();
+      renderPurchased();
+    </script>
+  </body>
+</html>

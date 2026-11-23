@@ -286,6 +286,7 @@ pre{padding:.75rem 1rem}
     <button class=&quot;os-tab on&quot; onclick=&quot;switchOS(this,'win')&quot;>🪟 Windows <span class=&quot;tab-count&quot; id=&quot;cnt-win&quot;>11</span></button>
     <button class=&quot;os-tab&quot; onclick=&quot;switchOS(this,'mac')&quot;>🍎 macOS <span class=&quot;tab-count&quot; id=&quot;cnt-mac&quot;>5</span></button>
     <button class=&quot;os-tab&quot; onclick=&quot;switchOS(this,'store')&quot;>🗄️ Kho lưu trữ <span class=&quot;tab-count&quot; id=&quot;cnt-store&quot;>2</span></button>
+    <button class=&quot;os-tab&quot; onclick=&quot;switchOS(this,'ipa')&quot;>📱 Tải IPA <span class=&quot;tab-count&quot; id=&quot;cnt-ipa&quot;>1</span></button>
   </div>
 </header>
 
@@ -671,6 +672,18 @@ pre{padding:.75rem 1rem}
   </div>
 </div>
 
+<!-- ══ TẢI IPA ══ -->
+<div class=&quot;page&quot; id=&quot;page-ipa&quot;>
+  <div class=&quot;sec&quot;>
+    <div class=&quot;sec-head&quot;><span class=&quot;sec-icon&quot;>📱</span><span class=&quot;sec-title&quot;>Tải IPA về máy tính (ipatool)</span><span class=&quot;sec-badge tag-mac&quot;>ipatool</span></div>
+    <p style=&quot;font-size:.85rem;color:var(--muted);margin:0 0 var(--sp4)&quot;>Tìm app theo tên hoặc Bundle ID, chọn phiên bản, xem app đã mua — rồi tạo file chạy để tải .ipa về máy tính. Trang không nhập Apple ID hay mật khẩu: đăng nhập chỉ làm trong Terminal trên máy của bạn.</p>
+    <style>.ipa-frame{width:100%;height:1500px;min-height:70vh;border:1px solid var(--bdr);border-radius:var(--rm);background:var(--surf);display:block}</style>
+    <iframe class=&quot;ipa-frame&quot; id=&quot;ipaFrame&quot; src=&quot;tai-ipa.html&quot; title=&quot;Tải IPA về máy tính&quot; loading=&quot;lazy&quot;></iframe>
+    <script>(function(){var f=document.getElementById('ipaFrame');if(!f)return;function fit(){try{var d=f.contentDocument;if(d&&d.body){var h=d.body.scrollHeight;if(h>400)f.style.height=Math.min(h+40,6000)+'px';}}catch(e){}}f.addEventListener('load',function(){fit();setInterval(fit,1500);});})();</script>
+    <p style=&quot;font-size:.8rem;color:var(--muted);margin-top:var(--sp3)&quot;>Nếu khung trên không tải được, <a href=&quot;tai-ipa.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>mở trang Tải IPA ở tab mới</a>. Nút tải trong trang tạo file .bat/.sh chạy ipatool trên máy tính — không tải thẳng file .ipa trong trình duyệt.</p>
+  </div>
+</div>
+
 <footer>Compiled by <strong>NVD Inc.</strong> &amp;nbsp;·&amp;nbsp; Lưu offline. &amp;nbsp;·&amp;nbsp; 2026</footer>
 
       </div>
@@ -790,5 +803,5 @@ function doSearch(q){
     }
   }, true);
 })();
-</script></body></html>" sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox" title="NVD App"></iframe></div>
+</script></body></html>" sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads" title="NVD App"></iframe></div>
 </body></html>
