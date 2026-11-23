@@ -476,10 +476,83 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
         </div>
       </section>
 
+      <!-- HƯỚNG DẪN TỪNG BƯỚC CHI TIẾT -->
+      <section id="huong-dan-chi-tiet">
+        <div class="sec-head">
+          <h2>5 · Hướng dẫn từng bước chi tiết trên máy tính</h2>
+          <p>Làm lần lượt từ bước 1 đến bước 7, đúng thứ tự là tải được. Toàn bộ thao tác chạy trên máy tính Windows, macOS hoặc Linux — trang web này chỉ dùng để tìm app và tạo sẵn lệnh, không tải thẳng file .ipa trong trình duyệt.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <h3>Bước 1 — Chuẩn bị máy tính và tải ipatool v2.8.1</h3>
+          <p>Dùng máy tính Windows, macOS hoặc Linux có mạng. Mở trang Releases chính chủ của ipatool và tải đúng bản cho hệ điều hành đang dùng (bản mới nhất hiện là <b>v2.8.1</b>; nếu trang Releases đã có bản mới hơn thì lấy bản mới nhất). Giải nén ra một thư mục riêng, ví dụ <code>Downloads/ipatool</code>. Cách cài chi tiết theo từng hệ điều hành xem ở <b>mục 3</b> phía trên — macOS cài nhanh nhất bằng Homebrew với <code>brew install ipatool</code>.</p>
+          <p><a href="https://github.com/majd/ipatool/releases" target="_blank" rel="noopener"><b>→ Mở trang Releases chính chủ của majd/ipatool</b></a></p>
+          <p class="hint">Chỉ tải từ trang Releases chính chủ này, đừng tải ipatool ở link lạ — bản giả có thể đánh cắp mật khẩu Apple ID của anh.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <h3>Bước 2 — Đăng nhập Apple ID trong terminal</h3>
+          <p>Mở <b>Terminal</b> trên macOS/Linux, hoặc <b>PowerShell / Windows Terminal</b> trên Windows, rồi chuyển vào thư mục vừa giải nén ipatool. Gõ lệnh sau, thay <code>email-cua-anh</code> bằng email Apple ID thật của anh:</p>
+          <div class="codebox"><pre><code>ipatool auth login --email email-cua-anh</code></pre><button class="copy-btn" data-copy="ipatool auth login --email email-cua-anh" type="button">Sao chép</button></div>
+          <p>Sau đó <b>gõ mật khẩu khi terminal hỏi</b> (lúc gõ sẽ không hiện ký tự nào, cứ gõ bình thường rồi Enter), rồi <b>nhập mã 2FA</b> Apple gửi về thiết bị tin cậy của anh. Đăng nhập xong, các lần sau ipatool dùng lại phiên đã lưu, không cần đăng nhập lại.</p>
+          <p class="hint">Trên Windows thì gõ <code>.\ipatool.exe auth login --email email-cua-anh</code> thay cho <code>ipatool …</code>.</p>
+          <p><b>⚠ Quan trọng:</b> chỉ gõ mật khẩu lúc terminal hỏi. <b>Không</b> dùng kiểu <code>--password</code> trên dòng lệnh, vì mật khẩu sẽ lưu vào lịch sử lệnh trên máy. <b>Không</b> nhập Apple ID hay mật khẩu vào bất kỳ ô nào trên trang web này — trang không có chỗ nhập và không bao giờ hỏi mật khẩu.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <h3>Bước 3 — Tìm app để lấy Bundle ID</h3>
+          <p>Chạy lệnh search, thay <code>CapCut</code> bằng tên app anh cần tìm. Kết quả hiện Bundle ID (dạng <code>com.ten.app</code>) — ghi lại để dùng ở các bước sau:</p>
+          <div class="codebox"><pre><code>ipatool search "CapCut"</code></pre><button class="copy-btn" data-copy="ipatool search &quot;CapCut&quot;" type="button">Sao chép</button></div>
+          <p>Hoặc tìm nhanh ngay trên trang này ở <b>mục 1</b>: gõ tên app hoặc Bundle ID, bấm chọn app trong kết quả là trang tự điền Bundle ID cho anh. Nếu đã biết sẵn Bundle ID thì bỏ qua bước này.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <h3>Bước 4 — Lấy giấy phép trước nếu app miễn phí chưa thuộc tài khoản</h3>
+          <p>App miễn phí mà tài khoản chưa từng “mua” (lấy) thì phải lấy giấy phép trước, nếu không lệnh tải sẽ báo lỗi. Thay <code>com.ten.app</code> bằng Bundle ID thật ở bước 3:</p>
+          <div class="codebox"><pre><code>ipatool purchase --bundle-identifier com.ten.app</code></pre><button class="copy-btn" data-copy="ipatool purchase --bundle-identifier com.ten.app" type="button">Sao chép</button></div>
+          <p>App đã mua rồi, hoặc đã lấy miễn phí rồi, thì bỏ qua bước này. App trả phí thì bắt buộc tài khoản này đã mua trên App Store từ trước mới tải được.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <h3>Bước 5 — Xem danh sách app đã mua</h3>
+          <p>Chạy lệnh sau để liệt kê toàn bộ app tài khoản đang sở hữu, kể cả app đã bị gỡ khỏi App Store:</p>
+          <div class="codebox"><pre><code>ipatool list-purchases</code></pre><button class="copy-btn" data-copy="ipatool list-purchases" type="button">Sao chép</button></div>
+          <p>Dán toàn bộ kết quả vào ô ở <b>mục 2 · Đã mua</b> trên trang này, trang sẽ tự nhận diện Bundle ID, tra icon và phiên bản để anh bấm chọn app cần tải. Muốn lọc theo nền tảng thì thêm <code>--platform macos</code> (hoặc ios, tvos…). Bấm vào từng app trong mục Đã mua là trang tạo sẵn lệnh tải cho app đó.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <h3>Bước 6 — Tải file IPA về máy</h3>
+          <p><b>Tải bản mới nhất:</b> thay <code>com.ten.app</code> bằng Bundle ID thật và <code>ten-app.ipa</code> bằng tên file anh muốn lưu. File sẽ nằm trong thư mục hiện tại của terminal:</p>
+          <div class="codebox"><pre><code>ipatool download -b com.ten.app -o ten-app.ipa</code></pre><button class="copy-btn" data-copy="ipatool download -b com.ten.app -o ten-app.ipa" type="button">Sao chép</button></div>
+          <p><b>Tải bản cũ:</b> xem danh sách các bản đã phát hành trước đã:</p>
+          <div class="codebox"><pre><code>ipatool list-versions -b com.ten.app</code></pre><button class="copy-btn" data-copy="ipatool list-versions -b com.ten.app" type="button">Sao chép</button></div>
+          <p>Lấy mã <code>external version ID</code> của bản cần tải trong danh sách đó, rồi tải bằng lệnh sau (thay <code>123456789</code> bằng mã thật):</p>
+          <div class="codebox"><pre><code>ipatool download -b com.ten.app --external-version-id 123456789 -o ten-app-cu.ipa</code></pre><button class="copy-btn" data-copy="ipatool download -b com.ten.app --external-version-id 123456789 -o ten-app-cu.ipa" type="button">Sao chép</button></div>
+          <p class="hint">App nặng thì đợi một lúc, ipatool tải song song và tự tải tiếp nếu bị ngắt giữa chừng. Trên trang này, bấm nút “Tải IPA về máy tính” ở mục 1 cũng tạo ra file chạy (.bat trên Windows, .sh trên macOS/Linux) chứa đúng lệnh tải cho app + phiên bản đã chọn — mở file đó trên máy tính là nó tự tải .ipa về.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <h3>Bước 7 — Đăng xuất khi tải xong</h3>
+          <p>Tải xong thì đăng xuất để xóa phiên đăng nhập khỏi máy, nhất là khi dùng máy không phải của mình:</p>
+          <div class="codebox"><pre><code>ipatool auth revoke</code></pre><button class="copy-btn" data-copy="ipatool auth revoke" type="button">Sao chép</button></div>
+          <p>Lần sau cần tải tiếp thì đăng nhập lại từ bước 2. File .ipa đã tải về vẫn nằm nguyên trong thư mục, đăng xuất không xóa file.</p>
+        </div>
+
+        <div class="warn">
+          <h3>An toàn khi đăng nhập — nhớ 4 điều</h3>
+          <ul>
+            <li><b>Dùng máy của mình là an toàn nhất:</b> mật khẩu anh gõ chỉ gửi lên máy chủ Apple lúc đăng nhập, phiên đăng nhập lưu trên máy mình, ipatool không gửi mật khẩu cho bất kỳ bên thứ ba nào.</li>
+            <li><b>Đừng đăng nhập Apple ID chính</b> (ID có iCloud, thanh toán) trên máy lạ hay máy người khác. Lỡ đăng nhập rồi thì chạy ngay <code>ipatool auth revoke</code> ở bước 7 để đăng xuất.</li>
+            <li><b>ID nào chỉ tải được app ID đó đã mua:</b> app trả phí chưa mua thì không tải được; app miễn phí phải lấy giấy phép trước ở bước 4.</li>
+            <li><b>File IPA về vẫn mã hóa FairPlay</b>, gắn đúng Apple ID đã mua — ký lại hay cài qua SideStore cũng không gỡ được lớp mã hóa này, không dùng để cài mod hay chèn tweak như IPA đã giải mã. Xem kỹ ở mục giới hạn FairPlay bên dưới.</li>
+          </ul>
+        </div>
+      </section>
+
       <!-- BẢNG LỆNH -->
       <section id="lenh">
         <div class="sec-head">
-          <h2>5 · Các lệnh thường dùng</h2>
+          <h2>6 · Các lệnh thường dùng</h2>
           <p>Toàn bộ lệnh chính của ipatool theo tài liệu gốc. Gõ <code>ipatool [lệnh] --help</code> để xem thêm tùy chọn của từng lệnh.</p>
         </div>
         <div class="cmd-grid">
@@ -523,7 +596,7 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
       <!-- TẢI XUỐNG -->
       <section id="tai-xuong">
         <div class="sec-head">
-          <h2>6 · Tải ipatool về máy tính</h2>
+          <h2>7 · Tải ipatool về máy tính</h2>
           <p>Mọi bản dựng chính thức đều nằm ở trang Releases của repo gốc. Bản mới nhất hiện tại là <b>v2.8.1</b> — bổ sung tải song song, tự nhận diện storefront theo khu vực và cải thiện khôi phục app đã bị gỡ.</p>
         </div>
         <div class="dl-grid">
