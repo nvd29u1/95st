@@ -192,6 +192,9 @@
       .p-card h4{margin:0;font-size:14.5px}
       .p-card .bid{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-3);word-break:break-all}
       .p-card .meta{font-size:12.5px;color:var(--ink-2);margin-top:3px}
+      .p-card .p-num{flex:none;width:26px;height:26px;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--ink-2);font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:15px}
+      .p-card .p-fallback-icon{flex:none;width:56px;height:56px;border-radius:13px;background:var(--accent);color:#fff;font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center}
+      @media(prefers-color-scheme:dark){.p-card .p-fallback-icon{color:#06231f}}
       .p-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
       .p-actions button{min-height:40px;padding:0 13px;border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:#fff}
       @media(prefers-color-scheme:dark){.p-actions button{color:#06231f}}
@@ -426,20 +429,22 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
       <section id="da-mua">
         <div class="sec-head">
           <h2>2 · Đã mua — tải lại app đã mua về dạng .ipa</h2>
-          <p>Sau khi đăng nhập tài khoản bằng ipatool trên máy tính, toàn bộ app tài khoản đã mua/tải sẽ nằm trong mục đã mua. Nạp danh sách đó vào trang này để xem, lọc và tải từng app về dạng .ipa — kể cả app đã bị gỡ khỏi App Store nhưng còn trong lịch sử mua.</p>
+          <p>Sau khi đăng nhập tài khoản bằng ipatool trên máy tính, toàn bộ app tài khoản đã mua/tải sẽ nằm trong mục đã mua. Nạp danh sách đó vào trang này để xem, lọc và tải từng app về dạng .ipa — kể cả app đã bị gỡ khỏi App Store nhưng còn trong lịch sử mua. Dán nguyên kết quả thô của lệnh, trang tự tách thành danh sách gọn có icon, mỗi app có nút Tải .ipa riêng — khỏi gõ Bundle ID tay.</p>
         </div>
         <div class="steps cols-3" style="margin-bottom:14px">
           <div class="step"><div class="num">1</div><h3>Đăng nhập trên máy của mình</h3><p>Mở terminal trên máy tính và chạy lệnh dưới đây. Mật khẩu + mã 2FA chỉ nhập trong cửa sổ này — <b>tuyệt đối không nhập Apple ID vào bất kỳ trang web nào</b>.</p><div class="codebox"><pre><code>ipatool auth login</code></pre><button class="copy-btn" data-copy="ipatool auth login" type="button">Sao chép</button></div></div>
           <div class="step"><div class="num">2</div><h3>Xuất danh sách đã mua</h3><p>Chạy lệnh liệt kê app đã mua, sao chép toàn bộ kết quả (hoặc lưu ra file) để nạp vào trang ở bước 3:</p><div class="codebox"><pre><code>ipatool list-purchases</code></pre><button class="copy-btn" data-copy="ipatool list-purchases" type="button">Sao chép</button></div></div>
-          <div class="step"><div class="num">3</div><h3>Nạp vào mục Đã mua</h3><p>Dán kết quả vào ô dưới hoặc chọn file đã lưu. Trang tự nhận diện Bundle ID, tra thêm icon / phiên bản từ App Store và hiện nút tải .ipa cho từng app. Danh sách chỉ nằm trong bộ nhớ của tab này, không gửi đi đâu.</p></div>
+          <div class="step"><div class="num">3</div><h3>Nạp vào mục Đã mua</h3><p>Dán nguyên kết quả vào ô dưới hoặc chọn file đã lưu — kể cả dòng log dạng <code>INF apps=[{...}] totalCount=11</code>, không cần xóa chữ thừa hay sửa gì. Trang tự tách tên app, phiên bản, ngày mua, tra thêm icon từ App Store và hiện nút tải .ipa cho từng app. Danh sách chỉ nằm trong bộ nhớ của tab này, không gửi đi đâu.</p></div>
         </div>
         <div class="card">
           <div class="field">
             <label for="p-import">Danh sách đã mua — dán kết quả lệnh list-purchases vào đây</label>
-            <textarea class="ta" id="p-import" placeholder="Dán kết quả của ipatool list-purchases (bảng chữ, JSON, hoặc mỗi dòng một Bundle ID đều nhận)…" spellcheck="false"></textarea>
+            <textarea class="ta" id="p-import" placeholder="Dán nguyên kết quả của ipatool list-purchases vào đây, không cần sửa gì — kể cả dòng log dạng: 8:40:20Z INF apps=[{...}] totalCount=11…" spellcheck="false"></textarea>
           </div>
+          <p class="hint">Nhận cả 3 dạng: JSON thuần <code>{"apps":[...]}</code>, mảng <code>[{...}]</code>, và dòng log <code>INF apps=[...] totalCount=...</code> — dán nguyên si. Chưa có kết quả thật thì bấm “Dán thử ví dụ” để xem trước.</p>
           <div class="import-actions">
             <button class="btn btn-primary btn-small" id="p-load" type="button">Nạp danh sách đã mua</button>
+            <button class="btn btn-ghost btn-small" id="p-sample" type="button">Dán thử ví dụ</button>
             <input type="file" id="p-file" accept=".json,.txt,.csv" aria-label="Chọn file danh sách đã mua" />
             <button class="btn btn-ghost btn-small" id="p-clear" type="button">Xoá danh sách</button>
           </div>
@@ -449,6 +454,11 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
           </div>
           <div class="search-row" style="margin-top:16px">
             <input id="p-filter" type="text" placeholder="Lọc trong mục Đã mua theo tên app hoặc Bundle ID…" autocomplete="off" spellcheck="false" aria-label="Lọc app đã mua" />
+            <select id="p-sort" aria-label="Sắp xếp app đã mua" style="min-height:48px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-family:inherit;font-size:14px">
+              <option value="date" selected>Mới mua trước</option>
+              <option value="name-asc">Tên A → Z</option>
+              <option value="name-desc">Tên Z → A</option>
+            </select>
           </div>
           <div class="status-msg" id="p-status" role="status"><span id="p-count">0 app đã mua</span> — nạp danh sách ở trên để bắt đầu.</div>
           <div class="results-grid" id="p-grid"></div>
@@ -1116,6 +1126,91 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
         }
         return ids;
       }
+      // ---------- Phân tích kết quả list-purchases ----------
+      // Nhận cả 3 dạng có thể dán:
+      //  1) JSON thuần: {"apps":[...]} hoặc {"count":11,"apps":[...]}
+      //  2) Mảng thuần: [{...},{...}]
+      //  3) Dòng log của ipatool: 8:40:20Z INF apps=[{...}] totalCount=11
+      // Trả về mảng {bundleID, id, name, version, purchaseDate, platforms, price}.
+      function normalizePurchase(o){
+        if(!o || typeof o !== 'object') return null;
+        var bundleId = clean(o.bundleID || o.bundleId || o.bundle_identifier || o.bundleIdentifier || '');
+        if(!bundleId) return null;
+        return {
+          bundleID: bundleId,
+          id: o.id || o.appId || o.trackId || null,
+          name: clean(o.name || o.trackName || ''),
+          version: clean(o.version || ''),
+          purchaseDate: clean(o.purchaseDate || o.purchase_date || ''),
+          platforms: Array.isArray(o.platforms) ? o.platforms : [],
+          price: (o.price === 0 ? 'Miễn phí' : (o.price != null ? String(o.price) : ''))
+        };
+      }
+      function itemsFromParsed(j){
+        var arr = null;
+        if(Array.isArray(j)) arr = j;
+        else if(j && Array.isArray(j.apps)) arr = j.apps;
+        else if(j && j.data && Array.isArray(j.data.apps)) arr = j.data.apps;
+        if(!arr) return [];
+        return arr.map(normalizePurchase).filter(function(x){ return !!x; });
+      }
+      function extractBalancedArray(text, fromIdx){
+        // fromIdx: vị trí của '[' mở mảng. Đếm ngoặc, bỏ qua chuỗi trong "...".
+        var depth = 0, inStr = false, esc = false, i;
+        for(i = fromIdx; i < text.length; i++){
+          var ch = text[i];
+          if(inStr){
+            if(esc) esc = false;
+            else if(ch === '\\') esc = true;
+            else if(ch === '"') inStr = false;
+          } else {
+            if(ch === '"') inStr = true;
+            else if(ch === '[') depth++;
+            else if(ch === ']'){ depth--; if(depth === 0) return text.slice(fromIdx, i + 1); }
+          }
+        }
+        return null;
+      }
+      function parsePurchases(text){
+        var t = String(text || '');
+        if(!t.trim()) return [];
+        // Dạng 1+2: toàn bộ văn bản là JSON.
+        try {
+          var items = itemsFromParsed(JSON.parse(t));
+          if(items.length) return items;
+        } catch(e){}
+        // Dạng 3: dòng log "... INF apps=[...] totalCount=...".
+        var at = t.indexOf('apps=[');
+        if(at >= 0){
+          var arrText = extractBalancedArray(t, at + 5);
+          if(arrText){
+            try {
+              var items2 = itemsFromParsed(JSON.parse(arrText));
+              if(items2.length) return items2;
+            } catch(e){}
+          }
+        }
+        // Dự phòng: mảng JSON đầu tiên tìm thấy trong văn bản.
+        var first = t.indexOf('[');
+        if(first >= 0){
+          var arrText2 = extractBalancedArray(t, first);
+          if(arrText2){
+            try {
+              var items3 = itemsFromParsed(JSON.parse(arrText2));
+              if(items3.length) return items3;
+            } catch(e){}
+          }
+        }
+        return [];
+      }
+      function lookupById(appId){
+        var country = $('q-country').value;
+        return itunes('https://itunes.apple.com/lookup?id=' + encodeURIComponent(appId) + '&country=' + country)
+          .then(function(data){
+            var r = data && data.results && data.results[0];
+            return r ? normalizeApp(r) : null;
+          }).catch(function(){ return null; });
+      }
       function lookupBundle(bundleId){
         var country = $('q-country').value;
         return itunes('https://itunes.apple.com/lookup?bundleId=' + encodeURIComponent(bundleId) + '&country=' + country)
@@ -1124,30 +1219,59 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
             return r ? normalizeApp(r) : null;
           }).catch(function(){ return null; });
       }
+      function purchasedDisplay(item){
+        // Ưu tiên thông tin tra từ App Store (có icon), thiếu thì lấy
+        // thông tin gốc trong kết quả list-purchases (tên, phiên bản, ngày mua).
+        var meta = item.meta || null;
+        var app = item.app || null;
+        return {
+          name: (app && app.name) || (meta && meta.name) || item.bundleId,
+          bundleId: item.bundleId,
+          icon: (app && app.icon) || '',
+          version: (app && app.version) || (meta && meta.version) || '',
+          purchaseDate: (meta && meta.purchaseDate) || '',
+          price: (app && app.price) || (meta && meta.price) || '',
+          size: (app && app.size) || ''
+        };
+      }
       function renderPurchased(){
         var filter = clean($('p-filter').value).toLowerCase();
+        var sortMode = $('p-sort') ? $('p-sort').value : 'date';
         var grid = $('p-grid');
         grid.innerHTML = '';
+        var list = state.purchased.map(function(item, idx){ return {item: item, orig: idx}; });
+        list.sort(function(a, b){
+          var da = purchasedDisplay(a.item), db = purchasedDisplay(b.item);
+          if(sortMode === 'name-asc') return da.name.localeCompare(db.name, 'vi');
+          if(sortMode === 'name-desc') return db.name.localeCompare(da.name, 'vi');
+          var ta = Date.parse(da.purchaseDate || ''), tb = Date.parse(db.purchaseDate || '');
+          if(!isNaN(ta) && !isNaN(tb) && ta !== tb) return tb - ta;
+          if(!isNaN(ta) && isNaN(tb)) return -1;
+          if(isNaN(ta) && !isNaN(tb)) return 1;
+          return a.orig - b.orig;
+        });
         var visible = 0;
-        state.purchased.forEach(function(item, idx){
-          var app = item.app;
-          var hay = ((app ? app.name : '') + ' ' + item.bundleId).toLowerCase();
+        list.forEach(function(entry){
+          var item = entry.item, idx = entry.orig;
+          var d = purchasedDisplay(item);
+          var hay = (d.name + ' ' + item.bundleId).toLowerCase();
           if(filter && hay.indexOf(filter) < 0) return;
           visible++;
           var card = document.createElement('div');
           card.className = 'p-card';
           var meta = [];
-          if(app){
-            if(app.version) meta.push('v' + app.version);
-            if(app.size) meta.push(app.size);
-            if(app.price) meta.push(app.price);
-          }
+          if(d.version) meta.push('v' + d.version);
+          if(d.purchaseDate) meta.push('Mua: ' + fmtDate(d.purchaseDate));
+          if(d.size) meta.push(d.size);
+          if(d.price) meta.push(d.price);
+          var initial = (d.name || '?').trim().charAt(0).toUpperCase();
           card.innerHTML =
             '<div class="top">' +
-              (app && app.icon ? '<img src="' + escHtml(app.icon) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'" />' : '') +
-              '<div style="min-width:0"><h4>' + escHtml(app ? (app.name || item.bundleId) : item.bundleId) + '</h4>' +
+              '<span class="p-num">' + visible + '</span>' +
+              (d.icon ? '<img src="' + escHtml(d.icon) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'" />' : '<span class="p-fallback-icon" aria-hidden="true">' + escHtml(initial) + '</span>') +
+              '<div style="min-width:0"><h4>' + escHtml(d.name) + '</h4>' +
               '<div class="bid">' + escHtml(item.bundleId) + '</div>' +
-              '<div class="meta">' + escHtml(meta.join(' · ') || (app ? '' : 'Không còn hiện trên App Store — vẫn tải được vì tài khoản đã mua')) + '</div></div>' +
+              '<div class="meta">' + escHtml(meta.join(' · ') || (d.icon ? '' : 'Không còn hiện trên App Store — vẫn tải được vì tài khoản đã mua')) + '</div></div>' +
             '</div>' +
             '<div class="p-actions">' +
               '<button type="button" data-act="dl">⬇ Tải .ipa</button>' +
@@ -1156,15 +1280,16 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
             '</div>';
           card.querySelector('[data-act="dl"]').addEventListener('click', function(){
             var prev = state.selected;
-            if(app) state.selected = app;
+            if(item.app) state.selected = item.app;
+            else if(item.meta) state.selected = {bundleId: item.bundleId, name: item.meta.name || item.bundleId, version: item.meta.version || ''};
             var s = scriptFor(item.bundleId);
             saveBlob(s.filename, s.text);
             state.selected = prev;
-            $('p-status').innerHTML = '<span id="p-count">' + state.purchased.length + ' app đã mua</span> — đã tải file ' + escHtml(s.filename) + ' cho ' + escHtml(item.bundleId) + '. Mở file trên máy tính để tải .ipa về.';
+            $('p-status').innerHTML = '<span id="p-count">' + state.purchased.length + ' app đã mua</span> — đã tải file ' + escHtml(s.filename) + ' cho ' + escHtml(d.name) + ' (' + escHtml(item.bundleId) + '). Mở file trên máy tính để tải .ipa về.';
             $('p-status').className = 'status-msg ok';
           });
           card.querySelector('[data-act="sel"]').addEventListener('click', function(){
-            if(app) selectApp(app, false);
+            if(item.app) selectApp(item.app, false);
             else { $('f-bundle').value = item.bundleId; state.selected = null; renderSelected(); renderOutputs(); }
             document.getElementById('cong-cu').scrollIntoView({behavior:'smooth'});
           });
@@ -1187,23 +1312,29 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
           (state.purchased.length ? ' — bấm “Tải .ipa” ở từng app để tải về máy tính, hoặc “Chọn &amp; chọn phiên bản” để tải bản cũ.' : ' — nạp danh sách ở trên để bắt đầu.');
         $('p-status').className = 'status-msg';
       }
-      function addPurchased(ids, doneMsg){
-        var fresh = ids.filter(function(id){
-          return !state.purchased.some(function(p){ return p.bundleId === id; });
+      function addPurchasedItems(items, doneMsg){
+        var fresh = items.filter(function(it){
+          return it && it.bundleID && !state.purchased.some(function(p){ return p.bundleId === it.bundleID; });
         });
         if(!fresh.length){
-          $('p-status').textContent = 'Không nhận diện được Bundle ID mới nào. Hãy dán toàn bộ kết quả của ipatool list-purchases, hoặc thêm tay từng Bundle ID.';
+          $('p-status').textContent = 'Không nhận diện được app mới nào. Hãy dán toàn bộ kết quả của ipatool list-purchases, hoặc thêm tay từng Bundle ID.';
           $('p-status').className = 'status-msg err';
           return;
         }
-        fresh.forEach(function(id){ state.purchased.push({bundleId: id, app: null}); });
+        fresh.forEach(function(it){ state.purchased.push({bundleId: it.bundleID, app: null, meta: it}); });
         renderPurchased();
-        $('p-status').innerHTML = '<span id="p-count">' + state.purchased.length + ' app đã mua</span> — đang tra icon &amp; phiên bản cho ' + fresh.length + ' app vừa nạp…';
+        $('p-status').innerHTML = '<span id="p-count">' + state.purchased.length + ' app đã mua</span> — đang tra icon cho ' + fresh.length + ' app vừa nạp…';
         var chain = Promise.resolve();
-        fresh.forEach(function(id){
+        fresh.forEach(function(it){
           chain = chain.then(function(){
-            return lookupBundle(id).then(function(app){
-              state.purchased.forEach(function(p){ if(p.bundleId === id) p.app = app; });
+            // Tra icon theo App Store ID trước (chính xác nhất),
+            // không được thì tra theo Bundle ID.
+            var byId = it.id ? lookupById(it.id) : Promise.resolve(null);
+            return byId.then(function(app){
+              if(app) return app;
+              return lookupBundle(it.bundleID);
+            }).then(function(app){
+              state.purchased.forEach(function(p){ if(p.bundleId === it.bundleID) p.app = app; });
               renderPurchased();
             });
           });
@@ -1213,6 +1344,9 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
           $('p-status').className = 'status-msg ok';
         });
       }
+      function addPurchased(ids, doneMsg){
+        addPurchasedItems(ids.map(function(id){ return {bundleID: id, id: null, name: '', version: '', purchaseDate: '', platforms: [], price: ''}; }), doneMsg);
+      }
       $('p-load').addEventListener('click', function(){
         var text = $('p-import').value || '';
         if(!text.trim()){
@@ -1220,7 +1354,9 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
           $('p-status').className = 'status-msg err';
           return;
         }
-        addPurchased(extractBundleIds(text));
+        var items = parsePurchases(text);
+        if(items.length) addPurchasedItems(items);
+        else addPurchased(extractBundleIds(text));
       });
       $('p-file').addEventListener('change', function(){
         var f = this.files && this.files[0];
@@ -1228,7 +1364,9 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
         var reader = new FileReader();
         reader.onload = function(){
           $('p-import').value = String(reader.result || '');
-          addPurchased(extractBundleIds($('p-import').value), 'Đã nạp danh sách từ file ' + f.name + '.');
+          var items = parsePurchases($('p-import').value);
+          if(items.length) addPurchasedItems(items, 'Đã nạp danh sách từ file ' + f.name + '.');
+          else addPurchased(extractBundleIds($('p-import').value), 'Đã nạp danh sách từ file ' + f.name + '.');
         };
         reader.readAsText(f);
       });
@@ -1245,6 +1383,13 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
         renderPurchased();
       });
       $('p-filter').addEventListener('input', renderPurchased);
+      $('p-sort').addEventListener('change', renderPurchased);
+      $('p-sample').addEventListener('click', function(){
+        $('p-import').value = '8:40:20Z INF apps=[{"bundleID":"net.whatsapp.WhatsApp","id":310633997,"name":"WhatsApp","platforms":["iphone","ipad"],"price":0,"purchaseDate":"2026-10-23T08:30:25Z","version":"26.46.72"},{"bundleID":"com.apple.TestFlight","id":899247664,"name":"TestFlight","platforms":["iphone","ipad"],"price":0,"purchaseDate":"2026-10-10T07:26:25Z","version":"3.3.1"}] count=2 totalCount=2 page=1';
+        $('p-status').textContent = 'Đã điền ví dụ dòng log list-purchases — bấm “Nạp danh sách đã mua” để xem danh sách gọn có icon.';
+        $('p-status').className = 'status-msg';
+        $('p-import').focus();
+      });
 
 
       // ---------- ipatool: luôn hiển thị bản mới nhất ----------
