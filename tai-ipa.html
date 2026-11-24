@@ -1012,27 +1012,41 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
         if(state.scriptOS === 'win'){
           var winUrl = latestAsset('win');
           var dlLine = dl.replace(/^ipatool download/, '"%IPATOOL%" download');
+          // Tim ipatool trong thu muc hien tai truoc (ca ten co phien ban,
+          // vd: ipatool-2.8.1-windows-amd64.exe) roi moi tim tren PATH.
+          // %~dp0 luon co dau \ o cuoi nen phai bo di truoc khi dat trong
+          // dau nhay kep: neu khong, chuong trinh ngoai (tar, ...) hieu
+          // \" o cuoi la dau nhay bi thoat, duong dan thua mot dau ".
+          var findLocalBat =
+            '  if exist "%HERE%\\ipatool.exe" set "IPATOOL=%HERE%\\ipatool.exe"\r\n' +
+            '  if not defined IPATOOL for %%F in ("%HERE%\\ipatool-*.exe") do if exist "%%~fF" if not defined IPATOOL set "IPATOOL=%%~fF"\r\n' +
+            '  if not defined IPATOOL if exist "%HERE%\\bin\\ipatool.exe" set "IPATOOL=%HERE%\\bin\\ipatool.exe"\r\n' +
+            '  if not defined IPATOOL for %%F in ("%HERE%\\bin\\ipatool-*.exe") do if exist "%%~fF" if not defined IPATOOL set "IPATOOL=%%~fF"\r\n';
           var installBlock = winUrl ?
             '  echo Chua co ipatool, dang tai ban moi nhat tu GitHub...\r\n' +
             '  powershell -NoProfile -Command "Invoke-WebRequest -Uri \'' + winUrl + '\' -OutFile \'%TEMP%\\ipatool.tar.gz\'"\r\n' +
             '  if errorlevel 1 (\r\n  echo Khong tai duoc ipatool. Mo trang https://github.com/majd/ipatool/releases de tai tay.\r\n  pause\r\n  exit /b 1\r\n)\r\n' +
-            '  tar -xzf "%TEMP%\\ipatool.tar.gz" -C "%~dp0"\r\n' +
-            '  if not exist "%~dp0ipatool.exe" (\r\n  echo Giai nen khong xong. Mo trang https://github.com/majd/ipatool/releases de tai tay.\r\n  pause\r\n  exit /b 1\r\n)\r\n' +
-            '  set "IPATOOL=%~dp0ipatool.exe"\r\n'
+            '  tar -xzf "%TEMP%\\ipatool.tar.gz" -C "%HERE%"\r\n' +
+            findLocalBat +
+            '  if not defined IPATOOL (\r\n  echo Giai nen khong xong. Mo trang https://github.com/majd/ipatool/releases de tai tay.\r\n  pause\r\n  exit /b 1\r\n)\r\n'
           : '  echo Chua co ipatool. Mo trang https://github.com/majd/ipatool/releases de tai ban Windows roi mo lai file nay.\r\n  pause\r\n  exit /b 1\r\n';
           return { filename: 'tai-ipa-' + slug + '.bat', text:
             '@echo off\r\n' +
             'chcp 65001 >nul\r\n' +
             'title Tai IPA - ' + safeName + '\r\n' +
-            'cd /d "%~dp0"\r\n' +
+            'set "HERE=%~dp0"\r\n' +
+            'if not "%HERE%"=="%~d0\\" set "HERE=%HERE:~0,-1%"\r\n' +
+            'cd /d "%HERE%"\r\n' +
             'echo ============================================\r\n' +
             'echo  Tai IPA: ' + bundle + '\r\n' +
             'echo  File nay tu lam het: kiem tra/cai ipatool,\r\n' +
             'echo  dang nhap Apple ID roi tai .ipa ve thu muc nay.\r\n' +
             'echo ============================================\r\n' +
-            'set "IPATOOL=ipatool"\r\n' +
+            'set "IPATOOL="\r\n' +
+            findLocalBat +
             'where ipatool >nul 2>nul\r\n' +
-            'if not errorlevel 1 goto :have_ipatool\r\n' +
+            'if not errorlevel 1 if not defined IPATOOL set "IPATOOL=ipatool"\r\n' +
+            'if defined IPATOOL goto :have_ipatool\r\n' +
             installBlock +
             ':have_ipatool\r\n' +
             'echo.\r\n' +
@@ -1052,13 +1066,22 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
         }
         var shUrl = latestAsset(state.scriptOS);
         var shDl = dl.replace(/^ipatool download/, '"$IPATOOL" download');
+        // Tim ipatool trong thu muc hien tai truoc (ca ten co phien ban,
+        // vd: ipatool-2.8.1-macos-arm64) roi moi tim tren PATH.
+        var shFind =
+          'find_ipatool() {\n' +
+          '  for f in "$SCRIPT_DIR/ipatool" "$SCRIPT_DIR"/ipatool-* "$SCRIPT_DIR/bin/ipatool" "$SCRIPT_DIR/bin"/ipatool-*; do\n' +
+          '    if [ -f "$f" ]; then chmod +x "$f" 2>/dev/null; IPATOOL="$f"; return 0; fi\n' +
+          '  done\n' +
+          '  return 1\n' +
+          '}\n';
         var shInstall = '';
         if(state.scriptOS === 'mac'){
-          shInstall = 'if command -v brew >/dev/null 2>&1; then\n  brew install ipatool\nfi\n';
+          shInstall += 'if command -v brew >/dev/null 2>&1; then\n  brew install ipatool\n  if command -v ipatool >/dev/null 2>&1; then IPATOOL="ipatool"; fi\nfi\n';
         }
-        shInstall += 'if ! command -v ipatool >/dev/null 2>&1; then\n';
+        shInstall += 'if [ -z "$IPATOOL" ] && ! find_ipatool; then\n';
         if(shUrl){
-          shInstall += '  echo "Chua co ipatool, dang tai ban moi nhat tu GitHub..."\n  curl -L -o /tmp/ipatool.tar.gz "' + shUrl + '" && tar -xzf /tmp/ipatool.tar.gz -C "$(dirname "$0")" && chmod +x "$(dirname "$0")/ipatool"\n';
+          shInstall += '  echo "Chua co ipatool, dang tai ban moi nhat tu GitHub..."\n  curl -L -o /tmp/ipatool.tar.gz "' + shUrl + '" || { echo "Khong tai duoc ipatool. Mo trang https://github.com/majd/ipatool/releases de tai tay."; exit 1; }\n  tar -xzf /tmp/ipatool.tar.gz -C "$SCRIPT_DIR" || { echo "Giai nen khong xong. Mo trang https://github.com/majd/ipatool/releases de tai tay."; exit 1; }\n  find_ipatool || { echo "Khong tim thay ipatool sau khi giai nen. Mo trang https://github.com/majd/ipatool/releases de tai tay."; exit 1; }\n';
         } else {
           shInstall += '  echo "Chua co ipatool. Mo trang https://github.com/majd/ipatool/releases de tai tay roi mo lai file nay."\n  exit 1\n';
         }
@@ -1067,11 +1090,14 @@ ipatool download -b com.example.app</code></pre><button class="copy-btn" id="cop
           '#!/bin/bash\n' +
           '# Tai IPA: ' + bundle + (name !== bundle ? ' (' + safeName + ')' : '') + '\n' +
           '# File nay tu lam het: kiem tra/cai ipatool, dang nhap Apple ID roi tai .ipa ve thu muc nay.\n' +
-          'cd "$(dirname "$0")"\n' +
-          'IPATOOL="ipatool"\n' +
+          'SCRIPT_DIR="$(dirname "$0")"\n' +
+          'cd "$SCRIPT_DIR"\n' +
+          'IPATOOL=""\n' +
+          'if command -v ipatool >/dev/null 2>&1; then IPATOOL="ipatool"; fi\n' +
+          shFind +
+          'if [ -z "$IPATOOL" ]; then find_ipatool; fi\n' +
           shInstall +
-          'if ! command -v ipatool >/dev/null 2>&1; then IPATOOL="./ipatool"; fi\n' +
-          'if ! command -v "$IPATOOL" >/dev/null 2>&1 && [ ! -x "$IPATOOL" ]; then echo "Khong tim thay ipatool. Mo trang https://github.com/majd/ipatool/releases de tai tay."; exit 1; fi\n' +
+          'if [ -z "$IPATOOL" ]; then echo "Khong tim thay ipatool. Mo trang https://github.com/majd/ipatool/releases de tai tay."; exit 1; fi\n' +
           'read -p "Ban da dang nhap Apple ID tren may nay chua? (y/n): " LOGGED\n' +
           'if [ "$LOGGED" != "y" ] && [ "$LOGGED" != "Y" ]; then\n' +
           '  read -p "Nhap email Apple ID: " APPLE_EMAIL\n' +
